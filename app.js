@@ -501,4 +501,14 @@ function init() {
   startListening();
 }
 
+// Surface otherwise-silent failures (e.g. a tap doing "nothing") as a
+// visible banner instead of only logging to a console nobody opens.
+window.addEventListener("error", (e) => {
+  showBanner(`Error: ${e.message}`, true);
+});
+window.addEventListener("unhandledrejection", (e) => {
+  const msg = (e.reason && e.reason.message) || String(e.reason);
+  showBanner(`Error: ${msg}`, true);
+});
+
 document.addEventListener("DOMContentLoaded", init);
