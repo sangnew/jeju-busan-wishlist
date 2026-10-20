@@ -507,8 +507,10 @@ function renderTripCalendar(p) {
   document.getElementById("calendar-title").textContent = p.calendarTitle;
 
   const dayMap = {};
+  p.arrivalDays.forEach((d) => { dayMap[d.date] = { ...d, trip: "travel" }; });
   p.busanDays.forEach((d) => { dayMap[d.date] = { ...d, trip: "busan" }; });
   p.days.forEach((d) => { dayMap[d.date] = { ...d, trip: "jeju" }; });
+  p.departureDays.forEach((d) => { dayMap[d.date] = { ...d, trip: "travel" }; });
 
   const year = 2026;
   const month = 11; // December (0-indexed)
@@ -530,11 +532,13 @@ function renderTripCalendar(p) {
     `;
   }
 
+  const legendTravel = lang === "ko" ? "이동일" : "Travel";
   const legendBusan = lang === "ko" ? "부산" : "Busan";
   const legendJeju = lang === "ko" ? "제주" : "Jeju";
   document.getElementById("trip-calendar").innerHTML = `
     <div class="calendar-grid">${grid}</div>
     <div class="calendar-legend">
+      <span class="legend-item"><span class="legend-dot travel-dot"></span>${legendTravel}</span>
       <span class="legend-item"><span class="legend-dot busan-dot"></span>${legendBusan}</span>
       <span class="legend-item"><span class="legend-dot jeju-dot"></span>${legendJeju}</span>
     </div>
@@ -547,6 +551,10 @@ function renderPlanTab() {
   document.getElementById("plan-edit-note").textContent = p.editNote;
   renderTripRoute(p);
   renderTripCalendar(p);
+
+  // Arrival
+  document.getElementById("arrival-plan-title").textContent = p.arrivalTitle;
+  document.getElementById("arrival-days").innerHTML = p.arrivalDays.map(dayCardHtml).join("");
 
   // Busan
   document.getElementById("busan-plan-title").textContent = p.busanTitle;
@@ -567,6 +575,10 @@ function renderPlanTab() {
   document.getElementById("plan-days-intro").textContent = p.daysIntro;
   document.getElementById("plan-caveat").textContent = p.caveat;
   document.getElementById("plan-days").innerHTML = p.days.map(dayCardHtml).join("");
+
+  // Departure
+  document.getElementById("departure-plan-title").textContent = p.departureTitle;
+  document.getElementById("departure-days").innerHTML = p.departureDays.map(dayCardHtml).join("");
 }
 
 function init() {

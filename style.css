@@ -394,11 +394,13 @@ body {
 .calendar-day .day-icon { font-size: 0.85rem; line-height: 1; }
 .calendar-day.busan-day { background: var(--amber-bg); color: var(--amber); }
 .calendar-day.jeju-day { background: #e3f3f1; color: var(--teal-dark); }
-.calendar-legend { display: flex; gap: 14px; margin-top: 10px; font-size: 0.78rem; color: var(--muted); }
+.calendar-day.travel-day { background: #ece9fb; color: #5b4bb8; }
+.calendar-legend { display: flex; gap: 14px; margin-top: 10px; font-size: 0.78rem; color: var(--muted); flex-wrap: wrap; }
 .legend-item { display: flex; align-items: center; gap: 5px; }
 .legend-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
 .legend-dot.busan-dot { background: var(--amber); }
 .legend-dot.jeju-dot { background: var(--teal); }
+.legend-dot.travel-dot { background: #5b4bb8; }
 
 .plan-intro { color: var(--muted); font-size: 0.9rem; margin: 0 0 14px; }
 .plan-caveat { color: var(--muted); font-size: 0.82rem; font-style: italic; margin: 14px 0 0; }

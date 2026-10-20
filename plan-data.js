@@ -10,10 +10,28 @@ const PLAN_DATA = {
     calendarTitle: "📅 Trip calendar",
     routeTitle: "🧭 Route at a glance",
     route: [
-      { icon: "🚄", label: "Pyeongtaek Jije" },
-      { icon: "🦪", label: "Busan (1 night)" },
+      { icon: "🛬", label: "Incheon Airport" },
+      { icon: "🐷", label: "Anjung-eup (jokbal)" },
+      { icon: "🚄", label: "Busan (1 night)" },
       { icon: "✈️", label: "Jeju (3 nights)" },
-      { icon: "🏠", label: "Home" },
+      { icon: "🏠", label: "Seoul" },
+      { icon: "🇨🇳", label: "China" },
+    ],
+
+    arrivalTitle: "🛬 Arrival — Dec 21 (Mon)",
+    arrivalDays: [
+      {
+        label: "Dec 21 (Mon)",
+        date: "2026-12-21",
+        icon: "🛬🐷",
+        theme: "Land at Incheon, drive to Pyeongtaek, jokbal dinner, rest before the early train",
+        items: [
+          { time: "16:40", place: "Incheon International Airport", desc: "Arrival" },
+          { time: "~17:30", place: "Leave the airport", desc: "Pick up the car, drive toward Pyeongtaek" },
+          { time: "Evening", place: "Anjung-eup, Pyeongtaek (안중읍)", desc: "Jokbal (족발) dinner" },
+          { time: "Night", place: "Rest in Anjung-eup", desc: "Early start tomorrow — KTX leaves Pyeongtaek Jije at 08:23" },
+        ],
+      },
     ],
 
     busanTitle: "🚅 Busan Plan — Dec 22 (Tue) – Dec 23 (Wed)",
@@ -161,11 +179,24 @@ const PLAN_DATA = {
           { time: "Midday", place: "Hyeopjae / Hallim Beach", desc: "White sand, turquoise water, view of Biyangdo island" },
           { time: "Afternoon", place: "Ecoland Theme Park", desc: "Train ride through forest — good indoor-leaning option if it's cold" },
           { time: "Evening", place: "🧺 Dongmun Traditional Market", desc: "Market dinner (as requested!) — street food & last meal before the airport" },
-          { time: "Night", place: "Jeju Int'l Airport", desc: "Flight out" },
+          { time: "Night", place: "Jeju Int'l Airport → Seoul", desc: "Flight back, arriving Seoul that night" },
         ],
       },
     ],
     caveat: "Prices and availability change daily in peak season — always confirm exact dates on the listing/booking site before deciding. Airbnb links above already carry your trip dates, so the price you see when you click is the real one.",
+
+    departureTitle: "🛫 Departure — Dec 27 (Sun)",
+    departureDays: [
+      {
+        label: "Dec 27 (Sun)",
+        date: "2026-12-27",
+        icon: "✈️🇨🇳",
+        theme: "Fly out from Incheon to China",
+        items: [
+          { time: "TBD", place: "Incheon International Airport", desc: "Check in for the flight to China" },
+        ],
+      },
+    ],
   },
   ko: {
     editNote: "이 페이지는 위시리스트 탭처럼 실시간으로 다 같이 고치는 게 아니라 제가(Claude) 큐레이션한 내용이에요 — 숙소를 바꾸거나 가격을 업데이트하고 싶으면 언제든 말씀해주시면 바로 반영해드려요.",
@@ -173,10 +204,28 @@ const PLAN_DATA = {
     calendarTitle: "📅 여행 달력",
     routeTitle: "🧭 한눈에 보는 루트",
     route: [
-      { icon: "🚄", label: "평택지제" },
-      { icon: "🦪", label: "부산 (1박)" },
+      { icon: "🛬", label: "인천공항" },
+      { icon: "🐷", label: "안중읍 (족발)" },
+      { icon: "🚄", label: "부산 (1박)" },
       { icon: "✈️", label: "제주 (3박)" },
-      { icon: "🏠", label: "집" },
+      { icon: "🏠", label: "서울" },
+      { icon: "🇨🇳", label: "중국" },
+    ],
+
+    arrivalTitle: "🛬 입국 — 12월 21일(월)",
+    arrivalDays: [
+      {
+        label: "12월 21일 (월)",
+        date: "2026-12-21",
+        icon: "🛬🐷",
+        theme: "인천 도착, 평택 이동, 족발 저녁, 다음날 이른 기차 전 휴식",
+        items: [
+          { time: "16:40", place: "인천국제공항", desc: "도착" },
+          { time: "약 17:30", place: "공항 출발", desc: "차 픽업 후 평택 방향 이동" },
+          { time: "저녁", place: "평택 안중읍", desc: "족발 저녁식사" },
+          { time: "밤", place: "안중읍에서 휴식", desc: "내일 아침 일찍 출발 — 평택지제역 KTX 08:23 출발" },
+        ],
+      },
     ],
 
     busanTitle: "🚅 부산 플랜 — 12월 22일(화) ~ 12월 23일(수)",
@@ -324,10 +373,23 @@ const PLAN_DATA = {
           { time: "낮", place: "협재/한림해수욕장", desc: "에메랄드빛 바다, 비양도 전망" },
           { time: "오후", place: "에코랜드 테마파크", desc: "숲속 기차 여행 — 추울 때 대안으로 좋음" },
           { time: "저녁", place: "🧺 동문재래시장", desc: "시장에서 저녁(요청하신 그거!) — 길거리 음식, 출국 전 마지막 식사" },
-          { time: "밤", place: "제주국제공항", desc: "비행기 탑승" },
+          { time: "밤", place: "제주국제공항 → 서울", desc: "비행기로 복귀, 그날 밤 서울 도착" },
         ],
       },
     ],
     caveat: "성수기라 가격과 숙소 여부가 매일 바뀝니다 — 예약 전 꼭 실제 날짜로 다시 확인하세요. 위 에어비앤비 링크에는 이미 여행 날짜가 들어있어서, 클릭하면 바로 실제 가격이 보여요.",
+
+    departureTitle: "🛫 출국 — 12월 27일(일)",
+    departureDays: [
+      {
+        label: "12월 27일 (일)",
+        date: "2026-12-27",
+        icon: "✈️🇨🇳",
+        theme: "인천공항에서 중국행 출국",
+        items: [
+          { time: "미정", place: "인천국제공항", desc: "중국행 항공편 체크인" },
+        ],
+      },
+    ],
   },
 };
