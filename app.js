@@ -159,10 +159,10 @@ function removeComment(trip, cat, item, commentId) {
 function compressImage(file, maxDim = 1600, quality = 0.8) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
-    reader.onerror = reject;
+    reader.onerror = () => reject(new Error("Couldn't read the file from your device"));
     reader.onload = () => {
       const img = new Image();
-      img.onerror = reject;
+      img.onerror = () => reject(new Error("Couldn't decode that image (unsupported format, e.g. HEIC?)"));
       img.onload = () => {
         let { width, height } = img;
         if (width > height && width > maxDim) { height = Math.round((height * maxDim) / width); width = maxDim; }
@@ -171,7 +171,7 @@ function compressImage(file, maxDim = 1600, quality = 0.8) {
         canvas.width = width;
         canvas.height = height;
         canvas.getContext("2d").drawImage(img, 0, 0, width, height);
-        canvas.toBlob((blob) => (blob ? resolve(blob) : reject(new Error("toBlob failed"))), "image/jpeg", quality);
+        canvas.toBlob((blob) => (blob ? resolve(blob) : reject(new Error("Image compression failed (toBlob)"))), "image/jpeg", quality);
       };
       img.src = reader.result;
     };
@@ -188,14 +188,15 @@ async function addPhoto(trip, cat, item, file) {
       method: "POST",
       body: formData,
     });
+    if (!res.ok) throw new Error(`ImgBB upload HTTP ${res.status}`);
     const json = await res.json();
-    if (!json.success) throw new Error("imgbb upload failed");
+    if (!json.success) throw new Error(`ImgBB upload rejected: ${(json.error && json.error.message) || "unknown"}`);
     const photo = { id: crypto.randomUUID(), url: json.data.url, ts: Date.now() };
     const newItem = { ...item, photos: [...(item.photos || []), photo] };
     await replaceListItem(trip, cat, item.id, newItem);
   } catch (e) {
     console.error(e);
-    showBanner(t("saveError"), true);
+    showBanner(`${t("saveError")} (${e.message})`, true);
   }
 }
 
