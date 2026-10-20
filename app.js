@@ -12,6 +12,7 @@ let data = emptyData();
 let docExists = false;
 const expandedComments = new Set();
 const likedLocally = new Set(JSON.parse(localStorage.getItem("wishlist_liked") || "[]"));
+const dislikedLocally = new Set(JSON.parse(localStorage.getItem("wishlist_disliked") || "[]"));
 
 function t(key, ...args) {
   const val = (I18N[lang] || I18N.en)[key];
@@ -207,10 +208,33 @@ function removePhoto(trip, cat, item, photoId) {
 
 function toggleLike(trip, cat, item) {
   const likedNow = likedLocally.has(item.id);
-  const newItem = { ...item, likes: Math.max(0, (item.likes || 0) + (likedNow ? -1 : 1)) };
+  const wasDisliked = dislikedLocally.has(item.id);
+  const newItem = {
+    ...item,
+    likes: Math.max(0, (item.likes || 0) + (likedNow ? -1 : 1)),
+    dislikes: wasDisliked ? Math.max(0, (item.dislikes || 0) - 1) : (item.dislikes || 0),
+  };
   if (likedNow) likedLocally.delete(item.id);
   else likedLocally.add(item.id);
+  if (wasDisliked) dislikedLocally.delete(item.id);
   localStorage.setItem("wishlist_liked", JSON.stringify([...likedLocally]));
+  localStorage.setItem("wishlist_disliked", JSON.stringify([...dislikedLocally]));
+  replaceListItem(trip, cat, item.id, newItem);
+}
+
+function toggleDislike(trip, cat, item) {
+  const dislikedNow = dislikedLocally.has(item.id);
+  const wasLiked = likedLocally.has(item.id);
+  const newItem = {
+    ...item,
+    dislikes: Math.max(0, (item.dislikes || 0) + (dislikedNow ? -1 : 1)),
+    likes: wasLiked ? Math.max(0, (item.likes || 0) - 1) : (item.likes || 0),
+  };
+  if (dislikedNow) dislikedLocally.delete(item.id);
+  else dislikedLocally.add(item.id);
+  if (wasLiked) likedLocally.delete(item.id);
+  localStorage.setItem("wishlist_liked", JSON.stringify([...likedLocally]));
+  localStorage.setItem("wishlist_disliked", JSON.stringify([...dislikedLocally]));
   replaceListItem(trip, cat, item.id, newItem);
 }
 
@@ -247,6 +271,7 @@ function renderList(trip, cat) {
       const key = `${trip}|${cat}|${item.id}`;
       const expanded = expandedComments.has(key);
       const liked = likedLocally.has(item.id);
+      const disliked = dislikedLocally.has(item.id);
       return `
       <div class="item-row${isDup ? " is-duplicate" : ""}">
         <div class="item-main">
@@ -260,6 +285,7 @@ function renderList(trip, cat) {
           `).join("")}</div>` : ""}
           <div class="item-actions">
             <button class="like-btn${liked ? " liked" : ""}" data-toggle-like="${key}">${liked ? "❤️" : "🤍"} ${item.likes || 0}</button>
+            <button class="dislike-btn${disliked ? " disliked" : ""}" data-toggle-dislike="${key}">${disliked ? "👎" : "🖐️"} ${item.dislikes || 0}</button>
             <button class="comment-toggle" data-toggle-comments="${key}">💬 ${comments.length}</button>
             <label class="photo-add-btn">📷
               <input type="file" accept="image/*" class="photo-input" data-photo-upload="${key}" hidden />
@@ -346,6 +372,7 @@ function wireDeleteDelegation() {
     const toggleBtn = e.target.closest("[data-toggle-comments]");
     const delCommentBtn = e.target.closest("[data-delete-comment]");
     const likeBtn = e.target.closest("[data-toggle-like]");
+    const dislikeBtn = e.target.closest("[data-toggle-dislike]");
     const delPhotoBtn = e.target.closest("[data-delete-photo]");
     const photoThumb = e.target.closest("[data-photo-view]");
 
@@ -372,6 +399,11 @@ function wireDeleteDelegation() {
       const item = (data.trips[trip][cat] || []).find((i) => i.id === itemId);
       if (!item) return;
       toggleLike(trip, cat, item);
+    } else if (dislikeBtn) {
+      const [trip, cat, itemId] = dislikeBtn.getAttribute("data-toggle-dislike").split("|");
+      const item = (data.trips[trip][cat] || []).find((i) => i.id === itemId);
+      if (!item) return;
+      toggleDislike(trip, cat, item);
     } else if (delPhotoBtn) {
       const [trip, cat, itemId, photoId] = delPhotoBtn.getAttribute("data-delete-photo").split("|");
       const item = (data.trips[trip][cat] || []).find((i) => i.id === itemId);

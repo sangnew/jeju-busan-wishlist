@@ -172,8 +172,8 @@ body {
   line-height: 1;
 }
 
-.item-actions { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
-.like-btn, .comment-toggle, .photo-add-btn {
+.item-actions { display: flex; align-items: center; gap: 10px; margin-top: 8px; flex-wrap: wrap; }
+.like-btn, .dislike-btn, .comment-toggle, .photo-add-btn {
   display: inline-flex;
   align-items: center;
   border: none;
@@ -185,7 +185,8 @@ body {
   padding: 2px 0;
 }
 .like-btn.liked { color: var(--danger); }
-.comment-toggle:hover, .like-btn:hover, .photo-add-btn:hover { text-decoration: underline; }
+.dislike-btn.disliked { color: var(--muted); font-weight: 700; }
+.comment-toggle:hover, .like-btn:hover, .dislike-btn:hover, .photo-add-btn:hover { text-decoration: underline; }
 .photo-add-btn { font-size: 0.95rem; cursor: pointer; }
 
 .comments-box { margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border); }
