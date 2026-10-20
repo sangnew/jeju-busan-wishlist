@@ -1,8 +1,69 @@
-// Curated Jeju stay + itinerary content (not crowd-sourced, so it lives
-// here as static bilingual data instead of in Firestore).
+// Curated Busan + Jeju stay/itinerary content (not crowd-sourced, so it
+// lives here as static bilingual data instead of in Firestore). Prices are
+// the best real figures found at research time — flights/Airbnb are dynamic,
+// so links are pre-filled with the actual trip dates so the live price shows
+// the moment someone opens them.
 const PLAN_DATA = {
   en: {
-    stayIntro: "4 reviewed options for 5 people, Dec 23–26 — 2 Airbnb pensions + 2 hotels (3 rooms also works fine). Prices below are ballpark; Airbnb pricing is dynamic for peak season, so confirm exact dates on the listing.",
+    editNote: "This page is curated by Claude, not crowd-edited like the wishlist tabs — just ask for any change (swap a stay, update a price) and it's updated here for everyone.",
+
+    busanTitle: "🚅 Busan Plan — Dec 22 (Tue) – Dec 23 (Wed)",
+    busanTransport: [
+      { label: "Pyeongtaek Jije → Busan (KTX)", detail: "08:23 departure, KTX-Sancheon · ~2h · ₩39,400/person (standard class; other departures run ~₩44,800)" },
+      { label: "Busan → Jeju (flight)", detail: "Evening 18:00–19:00ish, Gimhae(PUS)→Jeju(CJU) · Air Busan / Jin Air · ~₩40,000–60,000/person one-way (evening is usually the cheapest slot) — book on Skyscanner or Air Busan directly" },
+    ],
+    busanStaysIntro: "The capsule hotel you bookmarked (📍 on Gwangalli Beach Rd) — plus an Airbnb alternative with real separate rooms.",
+    busanStays: [
+      {
+        name: "Hotel 1 (capsule hotel)",
+        type: "Capsule hotel — matches your saved link",
+        area: "On Gwangalli Beach Road (수영구 광안해변로 203)",
+        rating: "9.3★ (Yeogi, 1,466 reviews) — \"best night view of any Busan hotel\"",
+        capacity: "Individual pods, not private rooms — fits 5 as 5 separate capsules",
+        price: "Ocean-view capsule ₩41,000/person, no-view ₩35,000/person → ~₩205,000 total if all 5 go ocean-view",
+        access: "Directly on the beach road, oceanfront",
+        url: "https://www.hotel1.me/capsule-hotel",
+        photo: "https://static.wixstatic.com/media/89e676_68c165cc639545c3b924a39e58c262e1~mv2_d_6192_4128_s_4_2.jpg",
+      },
+      {
+        name: "Haven Gwangan [헤이븐광안]",
+        type: "Airbnb — real 2-bedroom apartment",
+        area: "3-min walk to Gwangalli Beach, next to Millak the Market",
+        rating: "4.99★ (312 reviews) · Superhost",
+        capacity: "2 bedrooms, fits 5 (up to 6 with extra bedding)",
+        price: "Dynamic pricing — link below has your exact dates (Dec 22–23) pre-filled, so the live total shows when you open it",
+        access: "Gwangan Bridge view, front-facing windows both sides",
+        url: "https://www.airbnb.co.kr/rooms/922787654138854992?check_in=2026-12-22&check_out=2026-12-23&adults=5",
+        photo: "https://a0.muscache.com/im/pictures/40aba6a8-012b-464c-a10e-0d671c82f14d.jpg?im_w=720",
+      },
+    ],
+    busanDays: [
+      {
+        label: "Day 1 — Dec 22 (Tue)",
+        theme: "Arrive by KTX, rent a car, Songdo shellfish, Gamjeon-dong, check in, dinner at the fish market",
+        items: [
+          { time: "08:23", place: "Pyeongtaek Jije Station", desc: "KTX departure (₩39,400/person) → arrives Busan ~10:20" },
+          { time: "Late morning", place: "Rent a car", desc: "Pick up near Busan Station" },
+          { time: "Lunch", place: "🦪 Choijinsadaek (최진사댁), Songdo", desc: "Grilled shellfish (조개구이) — 4.7★, in the Songdo shellfish-restaurant cluster" },
+          { time: "Afternoon", place: "Gamjeon-dong (감전동)", desc: "Walk around — cafés and renovated warehouse streets" },
+          { time: "~16:00", place: "Check in — Gwangalli", desc: "Hotel 1 or Haven Gwangan (see stays above)" },
+          { time: "Evening", place: "🐟 Gwangalli Fish Market (광안리회센터)", desc: "Dinner at the market at the far end of Gwangalli Beach — fresh sashimi/seafood" },
+        ],
+      },
+      {
+        label: "Day 2 — Dec 23 (Wed)",
+        theme: "Gukbap breakfast, Nampo-dong lunch, evening flight to Jeju",
+        items: [
+          { time: "Morning", place: "🍚 Gukbap", desc: "Pork/beef soup-rice breakfast near Gwangalli" },
+          { time: "Lunch", place: "Nampo-dong (남포동)", desc: "Walk around and pick something on the spot" },
+          { time: "~16:00", place: "Return the rental car", desc: "Head to Gimhae Airport" },
+          { time: "18:00–19:00", place: "✈️ Flight PUS → CJU", desc: "~₩40,000–60,000/person one-way — book via Skyscanner or Air Busan" },
+        ],
+      },
+    ],
+
+    planStaysTitle: "🏡 Jeju — Where to stay (5 people)",
+    stayIntro: "4 reviewed options for 5 people, Dec 23–26 — 2 Airbnb pensions + 2 hotels (3 rooms also works fine). Airbnb links below have your exact dates pre-filled so the real total shows when opened.",
     stays: [
       {
         name: "Malkkang Street Hyeopjae (\"Biyangdo Emerald Sea\")",
@@ -10,9 +71,10 @@ const PLAN_DATA = {
         area: "Hallim (Hyeopjae Beach, west)",
         rating: "4.96★ (636 reviews) · Superhost",
         capacity: "Up to 6 guests · 2 bedrooms + rooftop",
-        price: "Est. ₩250,000–400,000/night (peak season, check dates)",
+        price: "Dynamic pricing — link has Dec 23–26 pre-filled for the live total",
         access: "3-min walk to Hyeopjae Beach; private rooftop pool & BBQ",
-        url: "https://www.airbnb.com/rooms/33980788",
+        url: "https://www.airbnb.com/rooms/33980788?check_in=2026-12-23&check_out=2026-12-26&adults=5",
+        photo: "https://a0.muscache.com/im/pictures/5c7e6a93-b729-41a8-b138-464ebcbf56c4.jpg?im_w=720",
       },
       {
         name: "Sinsan 385 — \"Between Sea and Bamboo Forest\"",
@@ -20,9 +82,10 @@ const PLAN_DATA = {
         area: "Seongsan (east)",
         rating: "4.98★ (113 reviews) · Superhost",
         capacity: "Up to 8 guests · 3 bedrooms, 4 beds, 2 baths",
-        price: "Est. ₩250,000–400,000/night (peak season, check dates)",
+        price: "Dynamic pricing — link has Dec 23–26 pre-filled for the live total",
         access: "Self check-in, free parking, sea view from every room",
-        url: "https://www.airbnb.com/rooms/1481780448913990546",
+        url: "https://www.airbnb.com/rooms/1481780448913990546?check_in=2026-12-23&check_out=2026-12-26&adults=5",
+        photo: "https://a0.muscache.com/im/pictures/hosting/Hosting-1481780448913990546/original/543ca5a3-449e-4971-91a0-84da4a3d2b2a.jpeg?im_w=720",
       },
       {
         name: "Iho Tewoo Ocean Family Hotel",
@@ -30,9 +93,10 @@ const PLAN_DATA = {
         area: "Iho-dong (next to airport)",
         rating: "9.5/10 (1,098 reviews on Yeogi)",
         capacity: "Ocean-view triple/ondol rooms, 2–3 guests each",
-        price: "From ₩57,500–64,500/night per room (member rate)",
+        price: "From ₩57,500–64,500/night per room (member rate) → ~₩115,000–195,000/night for 2 rooms × 3 nights",
         access: "7 min to the airport, 5-min walk to Iho Tewoo Beach — easiest for arrival/departure days",
         url: "https://www.yeogi.com/domestic-accommodations/58572",
+        photo: "https://ak-d.tripcdn.com/images/02062120009gigpokED6F_W_960_274_R5.webp",
       },
       {
         name: "Attirance Hotel & Pool Villa",
@@ -40,9 +104,10 @@ const PLAN_DATA = {
         area: "Seongsan (east)",
         rating: "9.2/10 (Yeogi) · 4.3 (167 reviews, Myrealtrip)",
         capacity: "Pool villa rooms, family-sized",
-        price: "Est. ₩97,000–340,000/night depending on room",
+        price: "~₩97,000–340,000/night depending on room × 3 nights",
         access: "Ocean view of Seongsan Ilchulbong & Udo; right on Olle Trail 1",
         url: "https://www.yeogi.com/domestic-accommodations/79938",
+        photo: "https://ak-d.tripcdn.com/images/1mc0g12000hfytg3w6FFF_R_960_660_R5_D.jpg",
       },
     ],
     daysIntro: "3 full days in Jeju (Dec 24–26) — tangerine-picking and a market dinner included as requested.",
@@ -81,10 +146,68 @@ const PLAN_DATA = {
         ],
       },
     ],
-    caveat: "Prices and availability change daily in peak season — always confirm exact dates on the listing/booking site before deciding.",
+    caveat: "Prices and availability change daily in peak season — always confirm exact dates on the listing/booking site before deciding. Airbnb links above already carry your trip dates, so the price you see when you click is the real one.",
   },
   ko: {
-    stayIntro: "5인 기준, 12/23~26일 리뷰 좋은 숙소 4곳 — 에어비앤비 펜션 2곳 + 호텔 2곳(방 3개로도 가능). 가격은 대략적인 추정치이며, 에어비앤비는 성수기 동적 가격이라 실제 날짜로 꼭 확인하세요.",
+    editNote: "이 페이지는 위시리스트 탭처럼 실시간으로 다 같이 고치는 게 아니라 제가(Claude) 큐레이션한 내용이에요 — 숙소를 바꾸거나 가격을 업데이트하고 싶으면 언제든 말씀해주시면 바로 반영해드려요.",
+
+    busanTitle: "🚅 부산 플랜 — 12월 22일(화) ~ 12월 23일(수)",
+    busanTransport: [
+      { label: "평택지제 → 부산 (KTX)", detail: "08:23 출발, KTX-산천 · 약 2시간 · 1인 39,400원 (일반실 기준, 다른 시간대는 약 44,800원)" },
+      { label: "부산 → 제주 (항공)", detail: "저녁 18~19시대, 김해공항(PUS)→제주(CJU) · 에어부산/진에어 · 편도 1인 약 40,000~60,000원 (저녁 시간대가 보통 가장 저렴) — 스카이스캐너 또는 에어부산 공식에서 예매" },
+    ],
+    busanStaysIntro: "저장해두신 캡슐호텔(📍광안해변로) + 실제 분리된 방이 있는 에어비앤비 대안입니다.",
+    busanStays: [
+      {
+        name: "호텔1 (캡슐호텔)",
+        type: "캡슐호텔 — 저장해두신 링크와 일치",
+        area: "광안해변로 203 (수영구)",
+        rating: "여기어때 9.3점 (1,466명 평가) — \"부산 어느 호텔보다 좋은 야경\"",
+        capacity: "개인 캡슐(1인실) 개념 — 방이 아니라 5개 캡슐로 5인 투숙",
+        price: "오션뷰 캡슐 1인 41,000원, 노뷰 1인 35,000원 → 5인 전원 오션뷰면 총 약 205,000원",
+        access: "광안리 해변도로 바로 위, 오션프론트",
+        url: "https://www.hotel1.me/capsule-hotel",
+        photo: "https://static.wixstatic.com/media/89e676_68c165cc639545c3b924a39e58c262e1~mv2_d_6192_4128_s_4_2.jpg",
+      },
+      {
+        name: "헤이븐광안 [HAVEN GWANGAN]",
+        type: "에어비앤비 — 실제 2룸 아파트",
+        area: "광안리해변 도보 3분, 밀락더마켓 옆",
+        rating: "4.99★ (312개 후기) · 수퍼호스트",
+        capacity: "침실 2개, 5인 기준 (이불 추가 시 최대 6인)",
+        price: "동적 가격제 — 아래 링크에 12월 22~23일 날짜가 미리 입력돼 있어서, 열면 바로 정확한 총액이 보여요",
+        access: "광안대교 정면뷰, 양면 창",
+        url: "https://www.airbnb.co.kr/rooms/922787654138854992?check_in=2026-12-22&check_out=2026-12-23&adults=5",
+        photo: "https://a0.muscache.com/im/pictures/40aba6a8-012b-464c-a10e-0d671c82f14d.jpg?im_w=720",
+      },
+    ],
+    busanDays: [
+      {
+        label: "Day 1 — 12/22 (화)",
+        theme: "KTX 도착, 렌트카, 송도 조개구이, 감전동, 체크인, 회센터 저녁",
+        items: [
+          { time: "08:23", place: "평택지제역", desc: "KTX 출발 (1인 39,400원) → 부산역 약 10:20 도착" },
+          { time: "오전 늦게", place: "렌트카 픽업", desc: "부산역 인근에서 픽업" },
+          { time: "점심", place: "🦪 최진사댁, 송도", desc: "조개구이 — 4.7★, 송도 조개구이거리 내" },
+          { time: "오후", place: "감전동", desc: "카페거리와 리모델링된 창고거리 산책" },
+          { time: "약 16:00", place: "광안리 체크인", desc: "호텔1 또는 헤이븐광안 (위 숙소 참고)" },
+          { time: "저녁", place: "🐟 광안리회센터", desc: "광안리 해변 끝자락 회센터에서 저녁 — 신선한 회/해산물" },
+        ],
+      },
+      {
+        label: "Day 2 — 12/23 (수)",
+        theme: "국밥 아침, 남포동 점심, 저녁 제주행 항공",
+        items: [
+          { time: "아침", place: "🍚 국밥", desc: "광안리 인근에서 국밥 아침식사" },
+          { time: "점심", place: "남포동", desc: "걷다가 현장에서 메뉴 선택" },
+          { time: "약 16:00", place: "렌트카 반납", desc: "김해공항으로 이동" },
+          { time: "18:00~19:00", place: "✈️ 부산→제주 항공편", desc: "편도 1인 약 40,000~60,000원 — 스카이스캐너 또는 에어부산에서 예매" },
+        ],
+      },
+    ],
+
+    planStaysTitle: "🏡 제주 — 숙소 추천 (5인 기준)",
+    stayIntro: "5인 기준, 12/23~26일 리뷰 좋은 숙소 4곳 — 에어비앤비 펜션 2곳 + 호텔 2곳(방 3개로도 가능). 아래 에어비앤비 링크에는 실제 날짜가 미리 입력돼 있어서, 열면 바로 정확한 금액이 보여요.",
     stays: [
       {
         name: "말캉스트릿 협재 (\"비양도 에메랄드씨\")",
@@ -92,9 +215,10 @@ const PLAN_DATA = {
         area: "한림/협재 (서부)",
         rating: "4.96★ (636개 후기) · 수퍼호스트",
         capacity: "최대 6인 · 침실 2개 + 루프탑",
-        price: "1박 약 25만~40만원 (성수기, 날짜별 확인 필요)",
+        price: "동적 가격제 — 링크에 12/23~26 날짜 미리 입력됨",
         access: "협재해변 도보 3분, 전용 루프탑 풀장 & 바베큐",
-        url: "https://www.airbnb.com/rooms/33980788",
+        url: "https://www.airbnb.com/rooms/33980788?check_in=2026-12-23&check_out=2026-12-26&adults=5",
+        photo: "https://a0.muscache.com/im/pictures/5c7e6a93-b729-41a8-b138-464ebcbf56c4.jpg?im_w=720",
       },
       {
         name: "신산385 — 바다와 대나무숲 사이",
@@ -102,9 +226,10 @@ const PLAN_DATA = {
         area: "성산 (동부)",
         rating: "4.98★ (113개 후기) · 수퍼호스트",
         capacity: "최대 8인 · 침실 3개, 침대 4개, 욕실 2개",
-        price: "1박 약 25만~40만원 (성수기, 날짜별 확인 필요)",
+        price: "동적 가격제 — 링크에 12/23~26 날짜 미리 입력됨",
         access: "셀프 체크인, 무료 주차, 모든 방에서 바다뷰",
-        url: "https://www.airbnb.com/rooms/1481780448913990546",
+        url: "https://www.airbnb.com/rooms/1481780448913990546?check_in=2026-12-23&check_out=2026-12-26&adults=5",
+        photo: "https://a0.muscache.com/im/pictures/hosting/Hosting-1481780448913990546/original/543ca5a3-449e-4971-91a0-84da4a3d2b2a.jpeg?im_w=720",
       },
       {
         name: "이호테우 오션패밀리호텔",
@@ -112,9 +237,10 @@ const PLAN_DATA = {
         area: "이호동 (공항 바로 옆)",
         rating: "여기어때 9.5점 (1,098명 평가)",
         capacity: "오션뷰 트리플/온돌룸, 객실당 2~3인",
-        price: "회원가 1박 57,500~64,500원/객실",
+        price: "회원가 1박 객실당 57,500~64,500원 → 2객실×3박 기준 약 345,000~387,000원",
         access: "공항 차량 7분, 이호테우해변 도보 5분 — 입출국일에 가장 편함",
         url: "https://www.yeogi.com/domestic-accommodations/58572",
+        photo: "https://ak-d.tripcdn.com/images/02062120009gigpokED6F_W_960_274_R5.webp",
       },
       {
         name: "아띠랑스 호텔&풀빌라",
@@ -122,9 +248,10 @@ const PLAN_DATA = {
         area: "성산 (동부)",
         rating: "여기어때 9.2점 · 마이리얼트립 4.3 (167개 후기)",
         capacity: "풀빌라 객실, 가족 단위 적합",
-        price: "객실별 1박 약 97,000~340,000원",
+        price: "객실별 1박 약 97,000~340,000원 × 3박",
         access: "성산일출봉&우도 오션뷰, 올레길 1코스 바로 옆",
         url: "https://www.yeogi.com/domestic-accommodations/79938",
+        photo: "https://ak-d.tripcdn.com/images/1mc0g12000hfytg3w6FFF_R_960_660_R5_D.jpg",
       },
     ],
     daysIntro: "제주 3일 풀데이 일정 (12/24~26) — 요청하신 귤 따기 체험과 시장 저녁 식사 포함했습니다.",
@@ -163,6 +290,6 @@ const PLAN_DATA = {
         ],
       },
     ],
-    caveat: "성수기라 가격과 숙소 여부가 매일 바뀝니다 — 예약 전 꼭 실제 날짜로 다시 확인하세요.",
+    caveat: "성수기라 가격과 숙소 여부가 매일 바뀝니다 — 예약 전 꼭 실제 날짜로 다시 확인하세요. 위 에어비앤비 링크에는 이미 여행 날짜가 들어있어서, 클릭하면 바로 실제 가격이 보여요.",
   },
 };

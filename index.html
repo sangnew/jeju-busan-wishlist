@@ -27,7 +27,7 @@
     <span data-i18n="tripJeju">Jeju</span>
   </button>
   <button class="trip-tab" data-trip="plan">
-    <span data-i18n="tripPlan">📋 Jeju Plan</span>
+    <span data-i18n="tripPlan">📋 Plan</span>
   </button>
 </nav>
 
@@ -173,18 +173,38 @@
     </article>
   </section>
 
-  <!-- ===== JEJU PLAN PANEL (curated, not crowd-sourced) ===== -->
+  <!-- ===== PLAN PANEL (curated, not crowd-sourced) ===== -->
   <section class="trip-panel" data-trip-panel="plan">
-    <p class="trip-dates" data-i18n="jejuDates">Dec 23 (Wed) night – Dec 26 (Sat) night</p>
+    <p class="plan-edit-note" id="plan-edit-note"></p>
+
+    <h2 class="plan-section-title" id="busan-plan-title"></h2>
 
     <article class="category-card">
-      <h2 data-i18n="planStaysTitle">🏡 Where to stay (5 people)</h2>
+      <h3 class="plan-subtitle" data-i18n="planTransportTitle">🎫 Transport</h3>
+      <div id="busan-transport"></div>
+    </article>
+
+    <article class="category-card">
+      <h3 class="plan-subtitle" data-i18n="busanStaysTitle">🏨 Where to stay (5 people)</h3>
+      <p class="plan-intro" id="busan-stays-intro"></p>
+      <div id="busan-stays"></div>
+    </article>
+
+    <article class="category-card">
+      <h3 class="plan-subtitle" data-i18n="planDayByDayTitle">🗓️ Day-by-day</h3>
+      <div id="busan-days"></div>
+    </article>
+
+    <h2 class="plan-section-title" id="jeju-plan-title" data-i18n="jejuDates">Dec 23 (Wed) night – Dec 26 (Sat) night</h2>
+
+    <article class="category-card">
+      <h3 class="plan-subtitle" data-i18n="planStaysTitle">🏡 Where to stay (5 people)</h3>
       <p class="plan-intro" id="plan-stays-intro"></p>
       <div id="plan-stays"></div>
     </article>
 
     <article class="category-card">
-      <h2 data-i18n="planDaysTitle">🗺️ 3-day itinerary</h2>
+      <h3 class="plan-subtitle" data-i18n="planDaysTitle">🗺️ 3-day itinerary</h3>
       <p class="plan-intro" id="plan-days-intro"></p>
       <div id="plan-days"></div>
       <p class="plan-caveat" id="plan-caveat"></p>

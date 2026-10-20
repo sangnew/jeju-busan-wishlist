@@ -445,30 +445,33 @@ function wireLightbox() {
   modal.addEventListener("click", (e) => { if (e.target === modal) modal.hidden = true; });
 }
 
-// ---- Jeju plan tab (curated static content from plan-data.js) ----
+// ---- Plan tab (curated static content from plan-data.js) ----
 
-function renderPlanTab() {
-  const p = PLAN_DATA[lang] || PLAN_DATA.en;
-
-  document.getElementById("plan-stays-intro").textContent = p.stayIntro;
-  document.getElementById("plan-stays").innerHTML = p.stays.map((s) => `
+function stayCardHtml(s) {
+  const photo = s.photo
+    ? `<img class="plan-card-photo" src="${escapeHtml(s.photo)}" data-photo-view="${escapeHtml(s.photo)}" alt="" />`
+    : "";
+  return `
     <div class="plan-card">
-      <div class="plan-card-head">
-        <strong>${escapeHtml(s.name)}</strong>
-        <span class="plan-tag">${escapeHtml(s.type)}</span>
+      ${photo}
+      <div class="plan-card-body">
+        <div class="plan-card-head">
+          <strong>${escapeHtml(s.name)}</strong>
+          <span class="plan-tag">${escapeHtml(s.type)}</span>
+        </div>
+        <div class="plan-card-row">📍 ${escapeHtml(s.area)}</div>
+        <div class="plan-card-row">⭐ ${escapeHtml(s.rating)}</div>
+        <div class="plan-card-row">👥 ${escapeHtml(s.capacity)}</div>
+        <div class="plan-card-row">💰 ${escapeHtml(s.price)}</div>
+        <div class="plan-card-row">🚗 ${escapeHtml(s.access)}</div>
+        <a class="plan-link" href="${escapeHtml(s.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(s.url)}</a>
       </div>
-      <div class="plan-card-row">📍 ${escapeHtml(s.area)}</div>
-      <div class="plan-card-row">⭐ ${escapeHtml(s.rating)}</div>
-      <div class="plan-card-row">👥 ${escapeHtml(s.capacity)}</div>
-      <div class="plan-card-row">💰 ${escapeHtml(s.price)}</div>
-      <div class="plan-card-row">🚗 ${escapeHtml(s.access)}</div>
-      <a class="plan-link" href="${escapeHtml(s.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(s.url)}</a>
     </div>
-  `).join("");
+  `;
+}
 
-  document.getElementById("plan-days-intro").textContent = p.daysIntro;
-  document.getElementById("plan-caveat").textContent = p.caveat;
-  document.getElementById("plan-days").innerHTML = p.days.map((d) => `
+function dayCardHtml(d) {
+  return `
     <div class="plan-day">
       <div class="plan-day-head">
         <strong>${escapeHtml(d.label)}</strong>
@@ -486,7 +489,33 @@ function renderPlanTab() {
         `).join("")}
       </div>
     </div>
+  `;
+}
+
+function renderPlanTab() {
+  const p = PLAN_DATA[lang] || PLAN_DATA.en;
+
+  document.getElementById("plan-edit-note").textContent = p.editNote;
+
+  // Busan
+  document.getElementById("busan-plan-title").textContent = p.busanTitle;
+  document.getElementById("busan-transport").innerHTML = p.busanTransport.map((t) => `
+    <div class="plan-card-row transport-row">
+      <strong>${escapeHtml(t.label)}</strong>
+      <div>${escapeHtml(t.detail)}</div>
+    </div>
   `).join("");
+  document.getElementById("busan-stays-intro").textContent = p.busanStaysIntro;
+  document.getElementById("busan-stays").innerHTML = p.busanStays.map(stayCardHtml).join("");
+  document.getElementById("busan-days").innerHTML = p.busanDays.map(dayCardHtml).join("");
+
+  // Jeju
+  document.getElementById("plan-stays-intro").textContent = p.stayIntro;
+  document.getElementById("plan-stays").innerHTML = p.stays.map(stayCardHtml).join("");
+
+  document.getElementById("plan-days-intro").textContent = p.daysIntro;
+  document.getElementById("plan-caveat").textContent = p.caveat;
+  document.getElementById("plan-days").innerHTML = p.days.map(dayCardHtml).join("");
 }
 
 function init() {
