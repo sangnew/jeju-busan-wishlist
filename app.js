@@ -340,7 +340,7 @@ function wireForms() {
 }
 
 function wireDeleteDelegation() {
-  document.getElementById("app").addEventListener("click", (e) => {
+  document.getElementById("app").addEventListener("click", async (e) => {
     const delBtn = e.target.closest("[data-delete]");
     const toggleBtn = e.target.closest("[data-toggle-comments]");
     const delCommentBtn = e.target.closest("[data-delete-comment]");
@@ -352,7 +352,7 @@ function wireDeleteDelegation() {
       const [trip, cat, id] = delBtn.getAttribute("data-delete").split("|");
       const item = (data.trips[trip][cat] || []).find((i) => i.id === id);
       if (!item) return;
-      if (!confirm(t("deleteConfirm"))) return;
+      if (!(await showConfirm(t("deleteConfirm")))) return;
       removeListItem(trip, cat, item);
     } else if (toggleBtn) {
       const key = toggleBtn.getAttribute("data-toggle-comments");
@@ -364,7 +364,7 @@ function wireDeleteDelegation() {
       const [trip, cat, itemId, commentId] = delCommentBtn.getAttribute("data-delete-comment").split("|");
       const item = (data.trips[trip][cat] || []).find((i) => i.id === itemId);
       if (!item) return;
-      if (!confirm(t("deleteConfirm"))) return;
+      if (!(await showConfirm(t("deleteConfirm")))) return;
       removeComment(trip, cat, item, commentId);
     } else if (likeBtn) {
       const [trip, cat, itemId] = likeBtn.getAttribute("data-toggle-like").split("|");
@@ -375,7 +375,7 @@ function wireDeleteDelegation() {
       const [trip, cat, itemId, photoId] = delPhotoBtn.getAttribute("data-delete-photo").split("|");
       const item = (data.trips[trip][cat] || []).find((i) => i.id === itemId);
       if (!item) return;
-      if (!confirm(t("deleteConfirm"))) return;
+      if (!(await showConfirm(t("deleteConfirm")))) return;
       removePhoto(trip, cat, item, photoId);
     } else if (photoThumb) {
       openLightbox(photoThumb.getAttribute("data-photo-view"));
@@ -405,6 +405,32 @@ function wireDeleteDelegation() {
     const text = textInput.value.trim();
     if (!author || !text) return;
     addComment(trip, cat, item, author, text);
+  });
+}
+
+// Custom confirm dialog instead of window.confirm() — some in-app browsers
+// (e.g. KakaoTalk's) handle native confirm()/alert() unreliably, which made
+// delete buttons look like they did nothing.
+function showConfirm(message) {
+  return new Promise((resolve) => {
+    const modal = document.getElementById("confirm-modal");
+    document.getElementById("confirm-message").textContent = message;
+    const yesBtn = document.getElementById("confirm-yes");
+    const noBtn = document.getElementById("confirm-no");
+    const cleanup = (result) => {
+      modal.hidden = true;
+      yesBtn.removeEventListener("click", onYes);
+      noBtn.removeEventListener("click", onNo);
+      modal.removeEventListener("click", onBackdrop);
+      resolve(result);
+    };
+    const onYes = () => cleanup(true);
+    const onNo = () => cleanup(false);
+    const onBackdrop = (e) => { if (e.target === modal) cleanup(false); };
+    yesBtn.addEventListener("click", onYes);
+    noBtn.addEventListener("click", onNo);
+    modal.addEventListener("click", onBackdrop);
+    modal.hidden = false;
   });
 }
 

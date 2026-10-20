@@ -297,6 +297,27 @@ body {
   cursor: pointer;
 }
 
+.modal-box {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 20px;
+  max-width: 320px;
+  width: 100%;
+  text-align: center;
+}
+#confirm-message { margin: 0 0 16px; font-size: 0.95rem; }
+.confirm-actions { display: flex; gap: 10px; justify-content: center; }
+.confirm-actions button {
+  border: none;
+  border-radius: 8px;
+  padding: 9px 20px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+#confirm-yes { background: var(--danger); color: white; }
+#confirm-no { background: var(--border); color: var(--ink); }
+
 .plan-intro { color: var(--muted); font-size: 0.9rem; margin: 0 0 14px; }
 .plan-caveat { color: var(--muted); font-size: 0.82rem; font-style: italic; margin: 14px 0 0; }
 .plan-card {
