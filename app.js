@@ -3,6 +3,9 @@ import {
   getFirestore, doc, onSnapshot, setDoc, updateDoc,
   arrayUnion, arrayRemove, runTransaction,
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import {
+  getStorage, ref, uploadBytes, getDownloadURL,
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-storage.js";
 
 const TRIPS = ["busan", "jeju"];
 const CATS = ["food", "activities", "places", "stays"];
@@ -11,6 +14,7 @@ let lang = localStorage.getItem("wishlist_lang") || "en";
 let data = emptyData();
 let docExists = false;
 const expandedComments = new Set();
+const likedLocally = new Set(JSON.parse(localStorage.getItem("wishlist_liked") || "[]"));
 
 function t(key, ...args) {
   const val = (I18N[lang] || I18N.en)[key];
@@ -71,6 +75,7 @@ function showBanner(msg, isError) {
 
 const app = initializeApp(FIREBASE_CONFIG);
 const db = getFirestore(app);
+const storage = getStorage(app);
 const docRef = doc(db, "wishlist", "data");
 
 function startListening() {
@@ -155,6 +160,59 @@ function removeComment(trip, cat, item, commentId) {
   replaceListItem(trip, cat, item.id, newItem);
 }
 
+function compressImage(file, maxDim = 1600, quality = 0.8) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = reject;
+    reader.onload = () => {
+      const img = new Image();
+      img.onerror = reject;
+      img.onload = () => {
+        let { width, height } = img;
+        if (width > height && width > maxDim) { height = Math.round((height * maxDim) / width); width = maxDim; }
+        else if (height > maxDim) { width = Math.round((width * maxDim) / height); height = maxDim; }
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext("2d").drawImage(img, 0, 0, width, height);
+        canvas.toBlob((blob) => (blob ? resolve(blob) : reject(new Error("toBlob failed"))), "image/jpeg", quality);
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+async function addPhoto(trip, cat, item, file) {
+  try {
+    const blob = await compressImage(file);
+    const path = `wishlist-photos/${item.id}-${crypto.randomUUID()}.jpg`;
+    const fileRef = ref(storage, path);
+    await uploadBytes(fileRef, blob, { contentType: "image/jpeg" });
+    const url = await getDownloadURL(fileRef);
+    const photo = { id: crypto.randomUUID(), url, ts: Date.now() };
+    const newItem = { ...item, photos: [...(item.photos || []), photo] };
+    await replaceListItem(trip, cat, item.id, newItem);
+  } catch (e) {
+    console.error(e);
+    showBanner(t("saveError"), true);
+  }
+}
+
+function removePhoto(trip, cat, item, photoId) {
+  const newItem = { ...item, photos: (item.photos || []).filter((p) => p.id !== photoId) };
+  replaceListItem(trip, cat, item.id, newItem);
+}
+
+function toggleLike(trip, cat, item) {
+  const likedNow = likedLocally.has(item.id);
+  const newItem = { ...item, likes: Math.max(0, (item.likes || 0) + (likedNow ? -1 : 1)) };
+  if (likedNow) likedLocally.delete(item.id);
+  else likedLocally.add(item.id);
+  localStorage.setItem("wishlist_liked", JSON.stringify([...likedLocally]));
+  replaceListItem(trip, cat, item.id, newItem);
+}
+
 // ---- rendering ----
 
 function renderAll() {
@@ -184,14 +242,28 @@ function renderList(trip, cat) {
       const dupCount = dupCounts[normalizeForDup(item.text)];
       const isDup = dupCount > 1;
       const comments = item.comments || [];
+      const photos = item.photos || [];
       const key = `${trip}|${cat}|${item.id}`;
       const expanded = expandedComments.has(key);
+      const liked = likedLocally.has(item.id);
       return `
       <div class="item-row${isDup ? " is-duplicate" : ""}">
         <div class="item-main">
           <div class="item-text">${escapeHtml(item.text)}${isDup ? ` <span class="dup-badge">${escapeHtml(t("duplicateTag", dupCount))}</span>` : ""}</div>
           <div class="item-meta">${escapeHtml(item.author)} · ${timeAgo(item.ts)}</div>
-          <button class="comment-toggle" data-toggle-comments="${key}">💬 ${comments.length}</button>
+          ${photos.length ? `<div class="photo-strip">${photos.map((p) => `
+            <div class="photo-thumb-wrap">
+              <img class="photo-thumb" src="${escapeHtml(p.url)}" data-photo-view="${escapeHtml(p.url)}" alt="" />
+              <button class="photo-delete" data-delete-photo="${key}|${p.id}" aria-label="${escapeHtml(t("deleteBtn"))}">×</button>
+            </div>
+          `).join("")}</div>` : ""}
+          <div class="item-actions">
+            <button class="like-btn${liked ? " liked" : ""}" data-toggle-like="${key}">${liked ? "❤️" : "🤍"} ${item.likes || 0}</button>
+            <button class="comment-toggle" data-toggle-comments="${key}">💬 ${comments.length}</button>
+            <label class="photo-add-btn">📷
+              <input type="file" accept="image/*" class="photo-input" data-photo-upload="${key}" hidden />
+            </label>
+          </div>
           <div class="comments-box" ${expanded ? "" : "hidden"}>
             ${comments.length === 0
               ? `<p class="comments-empty">${escapeHtml(t("commentsEmpty"))}</p>`
@@ -232,6 +304,7 @@ function wireLangToggle() {
     localStorage.setItem("wishlist_lang", lang);
     applyStaticI18n();
     renderAll();
+    renderPlanTab();
   });
 }
 
@@ -271,6 +344,9 @@ function wireDeleteDelegation() {
     const delBtn = e.target.closest("[data-delete]");
     const toggleBtn = e.target.closest("[data-toggle-comments]");
     const delCommentBtn = e.target.closest("[data-delete-comment]");
+    const likeBtn = e.target.closest("[data-toggle-like]");
+    const delPhotoBtn = e.target.closest("[data-delete-photo]");
+    const photoThumb = e.target.closest("[data-photo-view]");
 
     if (delBtn) {
       const [trip, cat, id] = delBtn.getAttribute("data-delete").split("|");
@@ -290,7 +366,30 @@ function wireDeleteDelegation() {
       if (!item) return;
       if (!confirm(t("deleteConfirm"))) return;
       removeComment(trip, cat, item, commentId);
+    } else if (likeBtn) {
+      const [trip, cat, itemId] = likeBtn.getAttribute("data-toggle-like").split("|");
+      const item = (data.trips[trip][cat] || []).find((i) => i.id === itemId);
+      if (!item) return;
+      toggleLike(trip, cat, item);
+    } else if (delPhotoBtn) {
+      const [trip, cat, itemId, photoId] = delPhotoBtn.getAttribute("data-delete-photo").split("|");
+      const item = (data.trips[trip][cat] || []).find((i) => i.id === itemId);
+      if (!item) return;
+      if (!confirm(t("deleteConfirm"))) return;
+      removePhoto(trip, cat, item, photoId);
+    } else if (photoThumb) {
+      openLightbox(photoThumb.getAttribute("data-photo-view"));
     }
+  });
+
+  document.getElementById("app").addEventListener("change", (e) => {
+    const input = e.target.closest("[data-photo-upload]");
+    if (!input || !input.files || !input.files[0]) return;
+    const [trip, cat, itemId] = input.getAttribute("data-photo-upload").split("|");
+    const item = (data.trips[trip][cat] || []).find((i) => i.id === itemId);
+    if (!item) return;
+    addPhoto(trip, cat, item, input.files[0]);
+    input.value = "";
   });
 
   document.getElementById("app").addEventListener("submit", (e) => {
@@ -309,13 +408,70 @@ function wireDeleteDelegation() {
   });
 }
 
+function openLightbox(url) {
+  document.getElementById("lightbox-img").src = url;
+  document.getElementById("photo-lightbox").hidden = false;
+}
+
+function wireLightbox() {
+  const modal = document.getElementById("photo-lightbox");
+  document.getElementById("lightbox-close").addEventListener("click", () => { modal.hidden = true; });
+  modal.addEventListener("click", (e) => { if (e.target === modal) modal.hidden = true; });
+}
+
+// ---- Jeju plan tab (curated static content from plan-data.js) ----
+
+function renderPlanTab() {
+  const p = PLAN_DATA[lang] || PLAN_DATA.en;
+
+  document.getElementById("plan-stays-intro").textContent = p.stayIntro;
+  document.getElementById("plan-stays").innerHTML = p.stays.map((s) => `
+    <div class="plan-card">
+      <div class="plan-card-head">
+        <strong>${escapeHtml(s.name)}</strong>
+        <span class="plan-tag">${escapeHtml(s.type)}</span>
+      </div>
+      <div class="plan-card-row">📍 ${escapeHtml(s.area)}</div>
+      <div class="plan-card-row">⭐ ${escapeHtml(s.rating)}</div>
+      <div class="plan-card-row">👥 ${escapeHtml(s.capacity)}</div>
+      <div class="plan-card-row">💰 ${escapeHtml(s.price)}</div>
+      <div class="plan-card-row">🚗 ${escapeHtml(s.access)}</div>
+      <a class="plan-link" href="${escapeHtml(s.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(s.url)}</a>
+    </div>
+  `).join("");
+
+  document.getElementById("plan-days-intro").textContent = p.daysIntro;
+  document.getElementById("plan-caveat").textContent = p.caveat;
+  document.getElementById("plan-days").innerHTML = p.days.map((d) => `
+    <div class="plan-day">
+      <div class="plan-day-head">
+        <strong>${escapeHtml(d.label)}</strong>
+        <span class="plan-day-theme">${escapeHtml(d.theme)}</span>
+      </div>
+      <div class="plan-timeline">
+        ${d.items.map((it) => `
+          <div class="plan-stop">
+            <div class="plan-stop-time">${escapeHtml(it.time)}</div>
+            <div class="plan-stop-main">
+              <div class="plan-stop-place">${escapeHtml(it.place)}</div>
+              <div class="plan-stop-desc">${escapeHtml(it.desc)}</div>
+            </div>
+          </div>
+        `).join("")}
+      </div>
+    </div>
+  `).join("");
+}
+
 function init() {
   applyStaticI18n();
   wireLangToggle();
   wireTripTabs();
   wireForms();
   wireDeleteDelegation();
+  wireLightbox();
   renderAll();
+  renderPlanTab();
   startListening();
 }
 

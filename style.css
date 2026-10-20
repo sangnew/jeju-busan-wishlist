@@ -140,9 +140,35 @@ body {
 .item-text { font-weight: 500; word-break: break-word; }
 .item-meta { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
 
-.comment-toggle {
-  display: inline-block;
-  margin-top: 6px;
+.photo-strip { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.photo-thumb-wrap { position: relative; width: 64px; height: 64px; }
+.photo-thumb {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  display: block;
+}
+.photo-delete {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0,0,0,0.65);
+  color: white;
+  cursor: pointer;
+  font-size: 0.75rem;
+  line-height: 1;
+}
+
+.item-actions { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
+.like-btn, .comment-toggle, .photo-add-btn {
+  display: inline-flex;
+  align-items: center;
   border: none;
   background: none;
   color: var(--teal-dark);
@@ -151,7 +177,10 @@ body {
   cursor: pointer;
   padding: 2px 0;
 }
-.comment-toggle:hover { text-decoration: underline; }
+.like-btn.liked { color: var(--danger); }
+.comment-toggle:hover, .like-btn:hover, .photo-add-btn:hover { text-decoration: underline; }
+.photo-add-btn { font-size: 0.95rem; cursor: pointer; }
+
 .comments-box { margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border); }
 .comments-empty { color: var(--muted); font-size: 0.82rem; font-style: italic; margin: 0 0 8px; }
 .comments-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }
@@ -242,7 +271,92 @@ body {
 .add-form button:hover { background: var(--teal-dark); }
 .add-form button:disabled { opacity: 0.6; cursor: not-allowed; }
 
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 50;
+}
+.lightbox-box { position: relative; max-width: 100%; max-height: 90vh; }
+.lightbox-box img { max-width: 100%; max-height: 90vh; display: block; border-radius: 8px; }
+#lightbox-close {
+  position: absolute;
+  top: -16px;
+  right: -16px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: white;
+  color: var(--ink);
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.plan-intro { color: var(--muted); font-size: 0.9rem; margin: 0 0 14px; }
+.plan-caveat { color: var(--muted); font-size: 0.82rem; font-style: italic; margin: 14px 0 0; }
+.plan-card {
+  background: var(--sand);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+}
+.plan-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+.plan-card-head strong { font-size: 1rem; }
+.plan-tag {
+  background: var(--teal);
+  color: white;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+.plan-card-row { font-size: 0.85rem; margin: 2px 0; color: var(--ink); }
+.plan-link {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 0.8rem;
+  color: var(--teal-dark);
+  word-break: break-all;
+}
+
+.plan-day { margin-bottom: 18px; }
+.plan-day-head { display: flex; flex-direction: column; margin-bottom: 8px; }
+.plan-day-head strong { font-size: 1.05rem; color: var(--teal-dark); }
+.plan-day-theme { font-size: 0.85rem; color: var(--muted); }
+.plan-timeline { display: flex; flex-direction: column; gap: 8px; }
+.plan-stop {
+  display: flex;
+  gap: 10px;
+  background: var(--sand);
+  border-radius: 10px;
+  padding: 8px 12px;
+}
+.plan-stop-time {
+  flex-shrink: 0;
+  width: 78px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--teal-dark);
+}
+.plan-stop-place { font-weight: 600; }
+.plan-stop-desc { font-size: 0.85rem; color: var(--muted); margin-top: 2px; }
+
 @media (max-width: 480px) {
   .site-header h1 { font-size: 1.25rem; }
   .header-inner { flex-direction: column; }
+  .plan-stop { flex-direction: column; gap: 2px; }
+  .plan-stop-time { width: auto; }
 }

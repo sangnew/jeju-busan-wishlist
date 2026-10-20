@@ -25,6 +25,9 @@
   <button class="trip-tab" data-trip="jeju">
     <span data-i18n="tripJeju">Jeju</span>
   </button>
+  <button class="trip-tab" data-trip="plan">
+    <span data-i18n="tripPlan">📋 Jeju Plan</span>
+  </button>
 </nav>
 
 <div id="status-banner" class="status-banner" hidden></div>
@@ -169,10 +172,36 @@
     </article>
   </section>
 
+  <!-- ===== JEJU PLAN PANEL (curated, not crowd-sourced) ===== -->
+  <section class="trip-panel" data-trip-panel="plan">
+    <p class="trip-dates" data-i18n="jejuDates">Dec 23 (Wed) night – Dec 26 (Sat) night</p>
+
+    <article class="category-card">
+      <h2 data-i18n="planStaysTitle">🏡 Where to stay (5 people)</h2>
+      <p class="plan-intro" id="plan-stays-intro"></p>
+      <div id="plan-stays"></div>
+    </article>
+
+    <article class="category-card">
+      <h2 data-i18n="planDaysTitle">🗺️ 3-day itinerary</h2>
+      <p class="plan-intro" id="plan-days-intro"></p>
+      <div id="plan-days"></div>
+      <p class="plan-caveat" id="plan-caveat"></p>
+    </article>
+  </section>
+
 </main>
+
+<div id="photo-lightbox" class="modal" hidden>
+  <div class="lightbox-box">
+    <button id="lightbox-close" aria-label="Close">×</button>
+    <img id="lightbox-img" src="" alt="" />
+  </div>
+</div>
 
 <script src="config.js"></script>
 <script src="i18n.js"></script>
+<script src="plan-data.js"></script>
 <script type="module" src="app.js"></script>
 </body>
 </html>
