@@ -1,4 +1,5 @@
 :root {
+  color-scheme: light;
   --teal: #0f766e;
   --teal-dark: #0b5a53;
   --sand: #f6f1e7;
@@ -299,13 +300,14 @@ body {
 
 .modal-box {
   background: var(--card);
+  color: var(--ink);
   border-radius: var(--radius);
   padding: 20px;
   max-width: 320px;
   width: 100%;
   text-align: center;
 }
-#confirm-message { margin: 0 0 16px; font-size: 0.95rem; }
+#confirm-message { margin: 0 0 16px; font-size: 0.95rem; color: var(--ink); }
 .confirm-actions { display: flex; gap: 10px; justify-content: center; }
 .confirm-actions button {
   border: none;
