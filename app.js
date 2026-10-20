@@ -1,7 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 import {
   getFirestore, doc, onSnapshot, setDoc, updateDoc,
-  arrayUnion, arrayRemove,
+  arrayUnion, arrayRemove, runTransaction,
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 const TRIPS = ["busan", "jeju"];
@@ -10,6 +10,7 @@ const CATS = ["food", "activities", "places", "stays"];
 let lang = localStorage.getItem("wishlist_lang") || "en";
 let data = emptyData();
 let docExists = false;
+const expandedComments = new Set();
 
 function t(key, ...args) {
   const val = (I18N[lang] || I18N.en)[key];
@@ -18,13 +19,11 @@ function t(key, ...args) {
 
 function emptyData() {
   const trips = {};
-  const rooms = {};
   TRIPS.forEach((trip) => {
     trips[trip] = {};
     CATS.forEach((cat) => { trips[trip][cat] = []; });
-    rooms[trip] = [];
   });
-  return { trips, rooms };
+  return { trips };
 }
 
 function normalize(raw) {
@@ -36,7 +35,6 @@ function normalize(raw) {
         if (Array.isArray(raw.trips[trip][cat])) base.trips[trip][cat] = raw.trips[trip][cat];
       });
     }
-    if (raw.rooms && Array.isArray(raw.rooms[trip])) base.rooms[trip] = raw.rooms[trip];
   });
   return base;
 }
@@ -125,23 +123,36 @@ async function removeListItem(trip, cat, item) {
   }
 }
 
-async function addRoomItem(trip, item) {
+// Atomically swaps one item (matched by id) for a new version — used for
+// comment edits, where a plain arrayRemove+arrayUnion could race with
+// another write and either flicker the item away or lose it for good.
+async function replaceListItem(trip, cat, itemId, newItem) {
   await ensureDoc();
   try {
-    await updateDoc(docRef, { [`rooms.${trip}`]: arrayUnion(item) });
+    await runTransaction(db, async (tx) => {
+      const snap = await tx.get(docRef);
+      const current = normalize(snap.data());
+      const arr = current.trips[trip][cat];
+      const idx = arr.findIndex((i) => i.id === itemId);
+      if (idx === -1) arr.push(newItem);
+      else arr[idx] = newItem;
+      tx.update(docRef, { [`trips.${trip}.${cat}`]: arr });
+    });
   } catch (e) {
     console.error(e);
     showBanner(t("saveError"), true);
   }
 }
 
-async function removeRoomItem(trip, item) {
-  try {
-    await updateDoc(docRef, { [`rooms.${trip}`]: arrayRemove(item) });
-  } catch (e) {
-    console.error(e);
-    showBanner(t("saveError"), true);
-  }
+function addComment(trip, cat, item, author, text) {
+  const comment = { id: crypto.randomUUID(), author, text, ts: Date.now() };
+  const newItem = { ...item, comments: [...(item.comments || []), comment] };
+  replaceListItem(trip, cat, item.id, newItem);
+}
+
+function removeComment(trip, cat, item, commentId) {
+  const newItem = { ...item, comments: (item.comments || []).filter((c) => c.id !== commentId) };
+  replaceListItem(trip, cat, item.id, newItem);
 }
 
 // ---- rendering ----
@@ -149,7 +160,6 @@ async function removeRoomItem(trip, item) {
 function renderAll() {
   TRIPS.forEach((trip) => {
     CATS.forEach((cat) => renderList(trip, cat));
-    renderRooms(trip);
   });
 }
 
@@ -173,42 +183,35 @@ function renderList(trip, cat) {
     .map((item) => {
       const dupCount = dupCounts[normalizeForDup(item.text)];
       const isDup = dupCount > 1;
+      const comments = item.comments || [];
+      const key = `${trip}|${cat}|${item.id}`;
+      const expanded = expandedComments.has(key);
       return `
       <div class="item-row${isDup ? " is-duplicate" : ""}">
         <div class="item-main">
           <div class="item-text">${escapeHtml(item.text)}${isDup ? ` <span class="dup-badge">${escapeHtml(t("duplicateTag", dupCount))}</span>` : ""}</div>
           <div class="item-meta">${escapeHtml(item.author)} · ${timeAgo(item.ts)}</div>
+          <button class="comment-toggle" data-toggle-comments="${key}">💬 ${comments.length}</button>
+          <div class="comments-box" ${expanded ? "" : "hidden"}>
+            ${comments.length === 0
+              ? `<p class="comments-empty">${escapeHtml(t("commentsEmpty"))}</p>`
+              : `<div class="comments-list">${comments.slice().sort((a, b) => a.ts - b.ts).map((c) => `
+                <div class="comment-row">
+                  <span class="comment-text"><strong>${escapeHtml(c.author)}:</strong> ${escapeHtml(c.text)}</span>
+                  <button class="comment-delete" data-delete-comment="${key}|${c.id}" aria-label="${escapeHtml(t("deleteBtn"))}">×</button>
+                </div>
+              `).join("")}</div>`}
+            <form class="comment-form" data-comment-form="${key}">
+              <input type="text" class="comment-name-input" placeholder="${escapeHtml(t("namePlaceholder"))}" required />
+              <input type="text" class="comment-text-input" placeholder="${escapeHtml(t("commentPlaceholder"))}" required />
+              <button type="submit">${escapeHtml(t("commentSendBtn"))}</button>
+            </form>
+          </div>
         </div>
         <button class="delete-btn" data-delete="${trip}|${cat}|${item.id}">${escapeHtml(t("deleteBtn"))}</button>
       </div>
     `;
     }).join("");
-}
-
-function renderRooms(trip) {
-  const card = document.querySelector(`.category-card[data-trip="${trip}"][data-cat-rooms]`);
-  if (!card) return;
-  const listEl = card.querySelector("[data-rooms-list]");
-  const summaryEl = card.querySelector("[data-rooms-summary]");
-  const items = (data.rooms && data.rooms[trip]) || [];
-  summaryEl.textContent = items.length ? t("roomsSummary", items.length) : "";
-  if (items.length === 0) {
-    listEl.innerHTML = `<p class="empty-msg">${escapeHtml(t("emptyRooms"))}</p>`;
-    return;
-  }
-  listEl.innerHTML = items
-    .slice()
-    .sort((a, b) => b.ts - a.ts)
-    .map((item) => `
-      <div class="item-row">
-        <div class="item-main">
-          <div class="item-text">${escapeHtml(item.count)} ${escapeHtml(t("roomCountLabel")).toLowerCase()}</div>
-          <div class="item-meta">${escapeHtml(item.author)} · ${timeAgo(item.ts)}</div>
-          ${item.note ? `<div class="item-note">${escapeHtml(item.note)}</div>` : ""}
-        </div>
-        <button class="delete-btn" data-delete-room="${trip}|${item.id}">${escapeHtml(t("deleteBtn"))}</button>
-      </div>
-    `).join("");
 }
 
 function applyStaticI18n() {
@@ -261,43 +264,48 @@ function wireForms() {
       textInput.value = "";
     });
   });
-
-  document.querySelectorAll(".category-card[data-cat-rooms] [data-rooms-form]").forEach((form) => {
-    const card = form.closest(".category-card");
-    const trip = card.getAttribute("data-trip");
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const nameInput = form.querySelector(".name-input");
-      const countInput = form.querySelector(".count-input");
-      const noteInput = form.querySelector(".note-input");
-      const author = nameInput.value.trim();
-      const count = parseInt(countInput.value, 10);
-      if (!author || !count) return;
-      const item = { id: crypto.randomUUID(), author, count, note: noteInput.value.trim(), ts: Date.now() };
-      addRoomItem(trip, item);
-      countInput.value = "";
-      noteInput.value = "";
-    });
-  });
 }
 
 function wireDeleteDelegation() {
   document.getElementById("app").addEventListener("click", (e) => {
     const delBtn = e.target.closest("[data-delete]");
-    const delRoomBtn = e.target.closest("[data-delete-room]");
+    const toggleBtn = e.target.closest("[data-toggle-comments]");
+    const delCommentBtn = e.target.closest("[data-delete-comment]");
+
     if (delBtn) {
       const [trip, cat, id] = delBtn.getAttribute("data-delete").split("|");
       const item = (data.trips[trip][cat] || []).find((i) => i.id === id);
       if (!item) return;
       if (!confirm(t("deleteConfirm"))) return;
       removeListItem(trip, cat, item);
-    } else if (delRoomBtn) {
-      const [trip, id] = delRoomBtn.getAttribute("data-delete-room").split("|");
-      const item = (data.rooms[trip] || []).find((i) => i.id === id);
+    } else if (toggleBtn) {
+      const key = toggleBtn.getAttribute("data-toggle-comments");
+      if (expandedComments.has(key)) expandedComments.delete(key);
+      else expandedComments.add(key);
+      const [trip, cat] = key.split("|");
+      renderList(trip, cat);
+    } else if (delCommentBtn) {
+      const [trip, cat, itemId, commentId] = delCommentBtn.getAttribute("data-delete-comment").split("|");
+      const item = (data.trips[trip][cat] || []).find((i) => i.id === itemId);
       if (!item) return;
       if (!confirm(t("deleteConfirm"))) return;
-      removeRoomItem(trip, item);
+      removeComment(trip, cat, item, commentId);
     }
+  });
+
+  document.getElementById("app").addEventListener("submit", (e) => {
+    const form = e.target.closest("[data-comment-form]");
+    if (!form) return;
+    e.preventDefault();
+    const [trip, cat, itemId] = form.getAttribute("data-comment-form").split("|");
+    const item = (data.trips[trip][cat] || []).find((i) => i.id === itemId);
+    if (!item) return;
+    const nameInput = form.querySelector(".comment-name-input");
+    const textInput = form.querySelector(".comment-text-input");
+    const author = nameInput.value.trim();
+    const text = textInput.value.trim();
+    if (!author || !text) return;
+    addComment(trip, cat, item, author, text);
   });
 }
 

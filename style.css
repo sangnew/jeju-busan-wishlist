@@ -136,10 +136,68 @@ body {
   margin-left: 4px;
   white-space: nowrap;
 }
-.item-main { min-width: 0; }
+.item-main { min-width: 0; flex: 1; }
 .item-text { font-weight: 500; word-break: break-word; }
 .item-meta { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
-.item-note { font-size: 0.85rem; color: var(--muted); margin-top: 2px; }
+
+.comment-toggle {
+  display: inline-block;
+  margin-top: 6px;
+  border: none;
+  background: none;
+  color: var(--teal-dark);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 2px 0;
+}
+.comment-toggle:hover { text-decoration: underline; }
+.comments-box { margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border); }
+.comments-empty { color: var(--muted); font-size: 0.82rem; font-style: italic; margin: 0 0 8px; }
+.comments-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }
+.comment-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  background: var(--card);
+  border-radius: 8px;
+  padding: 6px 8px;
+}
+.comment-text { font-size: 0.85rem; word-break: break-word; }
+.comment-delete {
+  flex-shrink: 0;
+  border: none;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1;
+  padding: 0 2px;
+}
+.comment-delete:hover { color: var(--danger); }
+.comment-form { display: flex; flex-wrap: wrap; gap: 6px; }
+.comment-form input {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 7px 9px;
+  font-size: 0.85rem;
+  font-family: inherit;
+}
+.comment-name-input { flex: 1 1 90px; min-width: 80px; }
+.comment-text-input { flex: 2 1 160px; min-width: 120px; }
+.comment-form button {
+  border: none;
+  background: var(--teal);
+  color: white;
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+.comment-form button:hover { background: var(--teal-dark); }
+
 .delete-btn {
   flex-shrink: 0;
   border: none;
@@ -170,8 +228,6 @@ body {
 }
 .field-name { flex: 1 1 110px; min-width: 90px; }
 .field-text { flex: 2 1 200px; min-width: 150px; }
-.field-count { flex: 0 1 90px; width: 90px; }
-.field-note { flex: 2 1 160px; min-width: 120px; }
 .add-form button {
   border: none;
   background: var(--teal);
@@ -185,8 +241,6 @@ body {
 }
 .add-form button:hover { background: var(--teal-dark); }
 .add-form button:disabled { opacity: 0.6; cursor: not-allowed; }
-
-.rooms-summary { color: var(--teal-dark); font-weight: 600; margin: 0 0 10px; }
 
 @media (max-width: 480px) {
   .site-header h1 { font-size: 1.25rem; }
