@@ -7,40 +7,49 @@ wants to eat, do, see, and where to stay for the trip:
 - Jeju: Dec 23 (Wed) night – Dec 26 (Sat) night
 
 No login required for anyone — open the link, type your name, add items.
-Everyone sees the same shared list.
+Everyone sees the same shared list, updated live.
 
 ## How it stores data
 
-It uses [jsonblob.com](https://jsonblob.com), a free, keyless JSON storage
-API, called directly from each visitor's browser. There's no server to run
-and no account needed for people using the site.
+It uses [Firebase Firestore](https://firebase.google.com/docs/firestore),
+called directly from each visitor's browser via the Firebase Web SDK (loaded
+from CDN, no build step). There's no server to run and no account needed for
+people using the site — only the project owner needs a (free) Firebase
+project.
 
-## One-time setup (do this once after deploying to GitHub Pages)
+## One-time setup (already done for this deployment)
 
-1. Push this folder to a GitHub repo and enable **GitHub Pages** (Settings →
-   Pages → Deploy from branch → `main` / root).
-2. Open the live Pages URL in your own browser.
-3. Click the small ⚙️ gear icon in the bottom-right corner → **Create shared
-   storage**.
-4. Copy the generated ID it shows you.
-5. Open `config.js`, replace `REPLACE_WITH_BLOB_ID` with that ID:
-   ```js
-   const BLOB_ID = "your-id-here";
+1. Create a Firebase project at https://console.firebase.google.com.
+2. Build → Firestore Database → create a database (any region) in test
+   mode.
+3. In the **Rules** tab, replace the default (time-limited) rule with:
    ```
-6. Commit and push. Redeploy. Now everyone who opens the link uses the same
-   shared storage — share the Pages URL with your family.
+   rules_version = '2';
+   service cloud.firestore {
+     match /databases/{database}/documents {
+       match /{document=**} {
+         allow read, write: if true;
+       }
+     }
+   }
+   ```
+   This has no expiry, unlike the default test-mode rule (which expires in
+   30 days) — needed since the trip is in December.
+4. Project settings → your apps → add a Web app → copy the `firebaseConfig`
+   object into `config.js` as `FIREBASE_CONFIG`.
+5. Push to GitHub and enable GitHub Pages (Settings → Pages → Deploy from
+   branch → `master` / root).
 
-Until step 6 is done, the site shows a "not set up yet" banner and new
-entries can't be saved for other visitors.
+The app creates its single Firestore document (`wishlist/data`) automatically
+on first write — no manual initialization needed.
 
 ## Notes / limitations
 
-- jsonblob.com blocks obvious bot/script traffic (e.g. `curl`), but works
-  fine from real browsers — this is how the admin-setup button and the whole
-  app are designed to run.
-- If two people submit at the exact same moment, the very last save wins
-  (rare for a small family group, but worth knowing).
+- Open security rules (`allow read, write: if true`) mean anyone with the
+  Firestore config (which is public in the page source) could technically
+  write to this database directly, not just through the site's UI. Fine for
+  a casual family trip list — don't store anything sensitive in it.
 - Deleting an item removes it for everyone — there's a confirm step, but no
   undo.
-- Data lives on jsonblob.com's free tier, not meant for sensitive
-  information — fine for restaurant names and sightseeing ideas.
+- Firestore's free tier (Spark plan) comfortably covers a small family trip's
+  worth of reads/writes.

@@ -1,6 +1,10 @@
-// Shared storage config.
-// First-time setup: open the deployed site, use the "Admin Setup" panel
-// (click the small gear icon, bottom-right) to create a shared JSONBlob,
-// then paste the generated BLOB_ID below and redeploy.
-const BLOB_ID = "REPLACE_WITH_BLOB_ID";
-const BLOB_API_BASE = "https://jsonblob.com/api/jsonBlob";
+// Firebase project config — safe to be public; access is controlled by
+// Firestore security rules, not by hiding these values.
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyA9OCKXK8OZu8Vz-lxkAiJh-nZVzOWuRJU",
+  authDomain: "trip-af733.firebaseapp.com",
+  projectId: "trip-af733",
+  storageBucket: "trip-af733.firebasestorage.app",
+  messagingSenderId: "870457044792",
+  appId: "1:870457044792:web:9fe9885f4fd8bcabf49bcd",
+};

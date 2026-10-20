@@ -147,28 +147,8 @@
 
 </main>
 
-<button id="admin-gear" aria-label="Admin Setup" title="Admin Setup">⚙️</button>
-
-<div id="admin-modal" class="modal" hidden>
-  <div class="modal-box">
-    <h3 data-i18n="adminTitle">Admin Setup</h3>
-    <p data-i18n="adminIntro">Run this once after deploying, to create the shared storage everyone will read/write to.</p>
-    <button id="admin-create-btn" data-i18n="adminCreateBtn">Create shared storage</button>
-    <div id="admin-result" hidden>
-      <p data-i18n="adminDone">Created! Copy this ID into config.js, then commit &amp; push:</p>
-      <div class="admin-id-row">
-        <code id="admin-blob-id"></code>
-        <button id="admin-copy-btn" data-i18n="adminCopyBtn">Copy</button>
-      </div>
-      <p class="admin-note" data-i18n="adminTestNote">This browser will use the new storage immediately (for testing), but other visitors won't until you update config.js and redeploy.</p>
-    </div>
-    <p id="admin-error" class="admin-error" hidden></p>
-    <button id="admin-close-btn" data-i18n="adminClose">Close</button>
-  </div>
-</div>
-
 <script src="config.js"></script>
 <script src="i18n.js"></script>
-<script src="app.js"></script>
+<script type="module" src="app.js"></script>
 </body>
 </html>
