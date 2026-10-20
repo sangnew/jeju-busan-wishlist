@@ -39,8 +39,14 @@
       <h2 data-i18n="catFood">🍽️ Food to eat</h2>
       <div class="list" data-list></div>
       <form class="add-form" data-form>
-        <input type="text" class="name-input" data-i18n-placeholder="namePlaceholder" placeholder="Your name" required />
-        <input type="text" class="text-input" data-i18n-placeholder="textPlaceholderFood" placeholder="e.g. Milmyeon at Sangsan Milmyeon" required />
+        <div class="field field-name">
+          <label class="field-label" data-i18n="nameLabel">Your name</label>
+          <input type="text" class="name-input" data-i18n-placeholder="namePlaceholder" placeholder="Your name" required />
+        </div>
+        <div class="field field-text">
+          <label class="field-label" data-i18n="itemLabel">Item</label>
+          <input type="text" class="text-input" data-i18n-placeholder="textPlaceholderFood" placeholder="e.g. Milmyeon at Sangsan Milmyeon" required />
+        </div>
         <button type="submit" data-i18n="addBtn">Add</button>
       </form>
     </article>
@@ -49,8 +55,14 @@
       <h2 data-i18n="catActivities">🎯 Things to do</h2>
       <div class="list" data-list></div>
       <form class="add-form" data-form>
-        <input type="text" class="name-input" data-i18n-placeholder="namePlaceholder" placeholder="Your name" required />
-        <input type="text" class="text-input" data-i18n-placeholder="textPlaceholderActivities" placeholder="e.g. Sunrise at Seongsan Ilchulbong" required />
+        <div class="field field-name">
+          <label class="field-label" data-i18n="nameLabel">Your name</label>
+          <input type="text" class="name-input" data-i18n-placeholder="namePlaceholder" placeholder="Your name" required />
+        </div>
+        <div class="field field-text">
+          <label class="field-label" data-i18n="itemLabel">Item</label>
+          <input type="text" class="text-input" data-i18n-placeholder="textPlaceholderActivities" placeholder="e.g. Sunrise at Seongsan Ilchulbong" required />
+        </div>
         <button type="submit" data-i18n="addBtn">Add</button>
       </form>
     </article>
@@ -59,8 +71,14 @@
       <h2 data-i18n="catPlaces">📍 Places to go</h2>
       <div class="list" data-list></div>
       <form class="add-form" data-form>
-        <input type="text" class="name-input" data-i18n-placeholder="namePlaceholder" placeholder="Your name" required />
-        <input type="text" class="text-input" data-i18n-placeholder="textPlaceholderPlaces" placeholder="e.g. Gamcheon Culture Village" required />
+        <div class="field field-name">
+          <label class="field-label" data-i18n="nameLabel">Your name</label>
+          <input type="text" class="name-input" data-i18n-placeholder="namePlaceholder" placeholder="Your name" required />
+        </div>
+        <div class="field field-text">
+          <label class="field-label" data-i18n="itemLabel">Item</label>
+          <input type="text" class="text-input" data-i18n-placeholder="textPlaceholderPlaces" placeholder="e.g. Gamcheon Culture Village" required />
+        </div>
         <button type="submit" data-i18n="addBtn">Add</button>
       </form>
     </article>
@@ -69,8 +87,14 @@
       <h2 data-i18n="catStays">🏨 Where to stay</h2>
       <div class="list" data-list></div>
       <form class="add-form" data-form>
-        <input type="text" class="name-input" data-i18n-placeholder="namePlaceholder" placeholder="Your name" required />
-        <input type="text" class="text-input" data-i18n-placeholder="textPlaceholderStays" placeholder="e.g. Hotel/area name or link" required />
+        <div class="field field-name">
+          <label class="field-label" data-i18n="nameLabel">Your name</label>
+          <input type="text" class="name-input" data-i18n-placeholder="namePlaceholder" placeholder="Your name" required />
+        </div>
+        <div class="field field-text">
+          <label class="field-label" data-i18n="itemLabel">Item</label>
+          <input type="text" class="text-input" data-i18n-placeholder="textPlaceholderStays" placeholder="e.g. Hotel/area name or link" required />
+        </div>
         <button type="submit" data-i18n="addBtn">Add</button>
       </form>
     </article>
@@ -80,9 +104,18 @@
       <p class="rooms-summary" data-rooms-summary></p>
       <div class="list" data-rooms-list></div>
       <form class="add-form rooms-form" data-rooms-form>
-        <input type="text" class="name-input" data-i18n-placeholder="namePlaceholder" placeholder="Your name" required />
-        <input type="number" class="count-input" min="1" max="10" data-i18n-placeholder="roomCountLabel" placeholder="Rooms" required />
-        <input type="text" class="note-input" data-i18n-placeholder="notePlaceholder" placeholder="Note (optional)" />
+        <div class="field field-name">
+          <label class="field-label" data-i18n="nameLabel">Your name</label>
+          <input type="text" class="name-input" data-i18n-placeholder="namePlaceholder" placeholder="Your name" required />
+        </div>
+        <div class="field field-count">
+          <label class="field-label" data-i18n="roomCountLabel">Rooms</label>
+          <input type="number" class="count-input" min="1" max="10" data-i18n-placeholder="roomCountLabel" placeholder="Rooms" required />
+        </div>
+        <div class="field field-note">
+          <label class="field-label" data-i18n="notePlaceholder">Note (optional)</label>
+          <input type="text" class="note-input" data-i18n-placeholder="notePlaceholder" placeholder="Note (optional)" />
+        </div>
         <button type="submit" data-i18n="addBtn">Add</button>
       </form>
     </article>
@@ -96,8 +129,14 @@
       <h2 data-i18n="catFood">🍽️ Food to eat</h2>
       <div class="list" data-list></div>
       <form class="add-form" data-form>
-        <input type="text" class="name-input" data-i18n-placeholder="namePlaceholder" placeholder="Your name" required />
-        <input type="text" class="text-input" data-i18n-placeholder="textPlaceholderFood" placeholder="e.g. Milmyeon at Sangsan Milmyeon" required />
+        <div class="field field-name">
+          <label class="field-label" data-i18n="nameLabel">Your name</label>
+          <input type="text" class="name-input" data-i18n-placeholder="namePlaceholder" placeholder="Your name" required />
+        </div>
+        <div class="field field-text">
+          <label class="field-label" data-i18n="itemLabel">Item</label>
+          <input type="text" class="text-input" data-i18n-placeholder="textPlaceholderFood" placeholder="e.g. Milmyeon at Sangsan Milmyeon" required />
+        </div>
         <button type="submit" data-i18n="addBtn">Add</button>
       </form>
     </article>
@@ -106,8 +145,14 @@
       <h2 data-i18n="catActivities">🎯 Things to do</h2>
       <div class="list" data-list></div>
       <form class="add-form" data-form>
-        <input type="text" class="name-input" data-i18n-placeholder="namePlaceholder" placeholder="Your name" required />
-        <input type="text" class="text-input" data-i18n-placeholder="textPlaceholderActivities" placeholder="e.g. Sunrise at Seongsan Ilchulbong" required />
+        <div class="field field-name">
+          <label class="field-label" data-i18n="nameLabel">Your name</label>
+          <input type="text" class="name-input" data-i18n-placeholder="namePlaceholder" placeholder="Your name" required />
+        </div>
+        <div class="field field-text">
+          <label class="field-label" data-i18n="itemLabel">Item</label>
+          <input type="text" class="text-input" data-i18n-placeholder="textPlaceholderActivities" placeholder="e.g. Sunrise at Seongsan Ilchulbong" required />
+        </div>
         <button type="submit" data-i18n="addBtn">Add</button>
       </form>
     </article>
@@ -116,8 +161,14 @@
       <h2 data-i18n="catPlaces">📍 Places to go</h2>
       <div class="list" data-list></div>
       <form class="add-form" data-form>
-        <input type="text" class="name-input" data-i18n-placeholder="namePlaceholder" placeholder="Your name" required />
-        <input type="text" class="text-input" data-i18n-placeholder="textPlaceholderPlaces" placeholder="e.g. Gamcheon Culture Village" required />
+        <div class="field field-name">
+          <label class="field-label" data-i18n="nameLabel">Your name</label>
+          <input type="text" class="name-input" data-i18n-placeholder="namePlaceholder" placeholder="Your name" required />
+        </div>
+        <div class="field field-text">
+          <label class="field-label" data-i18n="itemLabel">Item</label>
+          <input type="text" class="text-input" data-i18n-placeholder="textPlaceholderPlaces" placeholder="e.g. Gamcheon Culture Village" required />
+        </div>
         <button type="submit" data-i18n="addBtn">Add</button>
       </form>
     </article>
@@ -126,8 +177,14 @@
       <h2 data-i18n="catStays">🏨 Where to stay</h2>
       <div class="list" data-list></div>
       <form class="add-form" data-form>
-        <input type="text" class="name-input" data-i18n-placeholder="namePlaceholder" placeholder="Your name" required />
-        <input type="text" class="text-input" data-i18n-placeholder="textPlaceholderStays" placeholder="e.g. Hotel/area name or link" required />
+        <div class="field field-name">
+          <label class="field-label" data-i18n="nameLabel">Your name</label>
+          <input type="text" class="name-input" data-i18n-placeholder="namePlaceholder" placeholder="Your name" required />
+        </div>
+        <div class="field field-text">
+          <label class="field-label" data-i18n="itemLabel">Item</label>
+          <input type="text" class="text-input" data-i18n-placeholder="textPlaceholderStays" placeholder="e.g. Hotel/area name or link" required />
+        </div>
         <button type="submit" data-i18n="addBtn">Add</button>
       </form>
     </article>
@@ -137,9 +194,18 @@
       <p class="rooms-summary" data-rooms-summary></p>
       <div class="list" data-rooms-list></div>
       <form class="add-form rooms-form" data-rooms-form>
-        <input type="text" class="name-input" data-i18n-placeholder="namePlaceholder" placeholder="Your name" required />
-        <input type="number" class="count-input" min="1" max="10" data-i18n-placeholder="roomCountLabel" placeholder="Rooms" required />
-        <input type="text" class="note-input" data-i18n-placeholder="notePlaceholder" placeholder="Note (optional)" />
+        <div class="field field-name">
+          <label class="field-label" data-i18n="nameLabel">Your name</label>
+          <input type="text" class="name-input" data-i18n-placeholder="namePlaceholder" placeholder="Your name" required />
+        </div>
+        <div class="field field-count">
+          <label class="field-label" data-i18n="roomCountLabel">Rooms</label>
+          <input type="number" class="count-input" min="1" max="10" data-i18n-placeholder="roomCountLabel" placeholder="Rooms" required />
+        </div>
+        <div class="field field-note">
+          <label class="field-label" data-i18n="notePlaceholder">Note (optional)</label>
+          <input type="text" class="note-input" data-i18n-placeholder="notePlaceholder" placeholder="Note (optional)" />
+        </div>
         <button type="submit" data-i18n="addBtn">Add</button>
       </form>
     </article>
