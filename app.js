@@ -47,6 +47,10 @@ function escapeHtml(s) {
   }[c]));
 }
 
+function normalizeForDup(text) {
+  return text.trim().toLowerCase().replace(/\s+/g, " ");
+}
+
 function timeAgo(ts) {
   const diff = Math.max(0, Date.now() - ts);
   const mins = Math.floor(diff / 60000);
@@ -158,18 +162,27 @@ function renderList(trip, cat) {
     listEl.innerHTML = `<p class="empty-msg">${escapeHtml(t("emptyList"))}</p>`;
     return;
   }
+  const dupCounts = {};
+  items.forEach((item) => {
+    const key = normalizeForDup(item.text);
+    dupCounts[key] = (dupCounts[key] || 0) + 1;
+  });
   listEl.innerHTML = items
     .slice()
     .sort((a, b) => b.ts - a.ts)
-    .map((item) => `
-      <div class="item-row">
+    .map((item) => {
+      const dupCount = dupCounts[normalizeForDup(item.text)];
+      const isDup = dupCount > 1;
+      return `
+      <div class="item-row${isDup ? " is-duplicate" : ""}">
         <div class="item-main">
-          <div class="item-text">${escapeHtml(item.text)}</div>
+          <div class="item-text">${escapeHtml(item.text)}${isDup ? ` <span class="dup-badge">${escapeHtml(t("duplicateTag", dupCount))}</span>` : ""}</div>
           <div class="item-meta">${escapeHtml(item.author)} · ${timeAgo(item.ts)}</div>
         </div>
         <button class="delete-btn" data-delete="${trip}|${cat}|${item.id}">${escapeHtml(t("deleteBtn"))}</button>
       </div>
-    `).join("");
+    `;
+    }).join("");
 }
 
 function renderRooms(trip) {

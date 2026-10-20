@@ -119,6 +119,22 @@ body {
   background: var(--sand);
   border-radius: 10px;
   padding: 10px 12px;
+  border: 1px solid transparent;
+}
+.item-row.is-duplicate {
+  background: #fff3cd;
+  border-color: #f0c850;
+}
+.dup-badge {
+  display: inline-block;
+  background: #f0c850;
+  color: #5c4400;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 1px 7px;
+  border-radius: 10px;
+  margin-left: 4px;
+  white-space: nowrap;
 }
 .item-main { min-width: 0; }
 .item-text { font-weight: 500; word-break: break-word; }
