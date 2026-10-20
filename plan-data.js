@@ -7,6 +7,15 @@ const PLAN_DATA = {
   en: {
     editNote: "This page is curated by Claude, not crowd-edited like the wishlist tabs — just ask for any change (swap a stay, update a price) and it's updated here for everyone.",
 
+    calendarTitle: "📅 Trip calendar",
+    routeTitle: "🧭 Route at a glance",
+    route: [
+      { icon: "🚄", label: "Pyeongtaek Jije" },
+      { icon: "🦪", label: "Busan (1 night)" },
+      { icon: "✈️", label: "Jeju (3 nights)" },
+      { icon: "🏠", label: "Home" },
+    ],
+
     busanTitle: "🚅 Busan Plan — Dec 22 (Tue) – Dec 23 (Wed)",
     busanTransport: [
       { label: "Pyeongtaek Jije → Busan (KTX)", detail: "08:23 departure, KTX-Sancheon · ~2h · ₩39,400/person (standard class; other departures run ~₩44,800)" },
@@ -40,6 +49,8 @@ const PLAN_DATA = {
     busanDays: [
       {
         label: "Day 1 — Dec 22 (Tue)",
+        date: "2026-12-22",
+        icon: "🚅🦪",
         theme: "Arrive by KTX, rent a car, Songdo shellfish, Gamjeon-dong, check in, dinner at the fish market",
         items: [
           { time: "08:23", place: "Pyeongtaek Jije Station", desc: "KTX departure (₩39,400/person) → arrives Busan ~10:20" },
@@ -52,6 +63,8 @@ const PLAN_DATA = {
       },
       {
         label: "Day 2 — Dec 23 (Wed)",
+        date: "2026-12-23",
+        icon: "🍚✈️",
         theme: "Gukbap breakfast, Nampo-dong lunch, evening flight to Jeju",
         items: [
           { time: "Morning", place: "🍚 Gukbap", desc: "Pork/beef soup-rice breakfast near Gwangalli" },
@@ -114,6 +127,8 @@ const PLAN_DATA = {
     days: [
       {
         label: "Day 1 — Dec 24 (Thu)",
+        date: "2026-12-24",
+        icon: "🌅🍊",
         theme: "East coast: sunrise peak, tangerine picking, coastline",
         items: [
           { time: "Morning", place: "Seongsan Ilchulbong", desc: "Iconic sunrise-crater hike, ~1hr round trip" },
@@ -125,6 +140,8 @@ const PLAN_DATA = {
       },
       {
         label: "Day 2 — Dec 25 (Fri)",
+        date: "2026-12-25",
+        icon: "🌺🏔️",
         theme: "South coast & mid-mountain: winter flowers, snow, cliffs",
         items: [
           { time: "Morning", place: "Camellia Hill", desc: "Winter camellias in full bloom in December" },
@@ -136,6 +153,8 @@ const PLAN_DATA = {
       },
       {
         label: "Day 3 — Dec 26 (Sat)",
+        date: "2026-12-26",
+        icon: "🧺🚐",
         theme: "West coast back toward the airport, market dinner before the flight",
         items: [
           { time: "Morning", place: "Aewol Hamdam Coastal Walk", desc: "Café-lined coastal path" },
@@ -150,6 +169,15 @@ const PLAN_DATA = {
   },
   ko: {
     editNote: "이 페이지는 위시리스트 탭처럼 실시간으로 다 같이 고치는 게 아니라 제가(Claude) 큐레이션한 내용이에요 — 숙소를 바꾸거나 가격을 업데이트하고 싶으면 언제든 말씀해주시면 바로 반영해드려요.",
+
+    calendarTitle: "📅 여행 달력",
+    routeTitle: "🧭 한눈에 보는 루트",
+    route: [
+      { icon: "🚄", label: "평택지제" },
+      { icon: "🦪", label: "부산 (1박)" },
+      { icon: "✈️", label: "제주 (3박)" },
+      { icon: "🏠", label: "집" },
+    ],
 
     busanTitle: "🚅 부산 플랜 — 12월 22일(화) ~ 12월 23일(수)",
     busanTransport: [
@@ -184,6 +212,8 @@ const PLAN_DATA = {
     busanDays: [
       {
         label: "Day 1 — 12/22 (화)",
+        date: "2026-12-22",
+        icon: "🚅🦪",
         theme: "KTX 도착, 렌트카, 송도 조개구이, 감전동, 체크인, 회센터 저녁",
         items: [
           { time: "08:23", place: "평택지제역", desc: "KTX 출발 (1인 39,400원) → 부산역 약 10:20 도착" },
@@ -196,6 +226,8 @@ const PLAN_DATA = {
       },
       {
         label: "Day 2 — 12/23 (수)",
+        date: "2026-12-23",
+        icon: "🍚✈️",
         theme: "국밥 아침, 남포동 점심, 저녁 제주행 항공",
         items: [
           { time: "아침", place: "🍚 국밥", desc: "광안리 인근에서 국밥 아침식사" },
@@ -258,6 +290,8 @@ const PLAN_DATA = {
     days: [
       {
         label: "Day 1 — 12/24 (목)",
+        date: "2026-12-24",
+        icon: "🌅🍊",
         theme: "동부 해안: 일출봉, 귤 따기, 해안절경",
         items: [
           { time: "오전", place: "성산일출봉", desc: "유네스코 일출봉 등반, 왕복 약 1시간" },
@@ -269,6 +303,8 @@ const PLAN_DATA = {
       },
       {
         label: "Day 2 — 12/25 (금)",
+        date: "2026-12-25",
+        icon: "🌺🏔️",
         theme: "남부 & 중산간: 겨울꽃, 눈, 절벽",
         items: [
           { time: "오전", place: "카멜리아힐", desc: "12월 만개한 동백꽃" },
@@ -280,6 +316,8 @@ const PLAN_DATA = {
       },
       {
         label: "Day 3 — 12/26 (토)",
+        date: "2026-12-26",
+        icon: "🧺🚐",
         theme: "서부 → 제주시 복귀, 출국 전 시장 저녁",
         items: [
           { time: "오전", place: "애월 한담해안산책로", desc: "카페거리와 해안 산책길" },

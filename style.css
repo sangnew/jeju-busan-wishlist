@@ -8,6 +8,8 @@
   --card: #ffffff;
   --border: #e5e0d3;
   --danger: #b91c1c;
+  --amber: #c2660d;
+  --amber-bg: #fdf0e2;
   --radius: 14px;
 }
 
@@ -344,6 +346,59 @@ body {
 .plan-subtitle { margin: 0 0 12px; font-size: 1.05rem; }
 .transport-row { background: var(--sand); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; }
 .transport-row div { color: var(--muted); font-size: 0.85rem; margin-top: 2px; }
+
+.trip-route {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  overflow-x: auto;
+}
+.route-stop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 64px;
+}
+.route-icon { font-size: 1.6rem; }
+.route-label { font-size: 0.72rem; color: var(--muted); text-align: center; white-space: nowrap; }
+.route-arrow { color: var(--border); font-size: 1.2rem; flex-shrink: 0; }
+
+.trip-calendar { max-width: 420px; }
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+.calendar-dow {
+  text-align: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--muted);
+  padding-bottom: 4px;
+}
+.calendar-day {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: var(--sand);
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+.calendar-day.empty { background: transparent; }
+.calendar-day .day-num { font-weight: 600; }
+.calendar-day .day-icon { font-size: 0.85rem; line-height: 1; }
+.calendar-day.busan-day { background: var(--amber-bg); color: var(--amber); }
+.calendar-day.jeju-day { background: #e3f3f1; color: var(--teal-dark); }
+.calendar-legend { display: flex; gap: 14px; margin-top: 10px; font-size: 0.78rem; color: var(--muted); }
+.legend-item { display: flex; align-items: center; gap: 5px; }
+.legend-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.legend-dot.busan-dot { background: var(--amber); }
+.legend-dot.jeju-dot { background: var(--teal); }
 
 .plan-intro { color: var(--muted); font-size: 0.9rem; margin: 0 0 14px; }
 .plan-caveat { color: var(--muted); font-size: 0.82rem; font-style: italic; margin: 14px 0 0; }

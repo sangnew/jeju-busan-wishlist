@@ -492,10 +492,61 @@ function dayCardHtml(d) {
   `;
 }
 
+function renderTripRoute(p) {
+  document.getElementById("route-title").textContent = p.routeTitle;
+  document.getElementById("trip-route").innerHTML = p.route.map((r, i) => `
+    <div class="route-stop">
+      <span class="route-icon">${r.icon}</span>
+      <span class="route-label">${escapeHtml(r.label)}</span>
+    </div>
+    ${i < p.route.length - 1 ? '<span class="route-arrow">→</span>' : ""}
+  `).join("");
+}
+
+function renderTripCalendar(p) {
+  document.getElementById("calendar-title").textContent = p.calendarTitle;
+
+  const dayMap = {};
+  p.busanDays.forEach((d) => { dayMap[d.date] = { ...d, trip: "busan" }; });
+  p.days.forEach((d) => { dayMap[d.date] = { ...d, trip: "jeju" }; });
+
+  const year = 2026;
+  const month = 11; // December (0-indexed)
+  const firstDow = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const dow = (I18N[lang] || I18N.en).dowShort;
+
+  let grid = dow.map((d) => `<div class="calendar-dow">${escapeHtml(d)}</div>`).join("");
+  for (let i = 0; i < firstDow; i++) grid += `<div class="calendar-day empty"></div>`;
+  for (let day = 1; day <= daysInMonth; day++) {
+    const iso = `${year}-12-${String(day).padStart(2, "0")}`;
+    const entry = dayMap[iso];
+    const cls = entry ? ` ${entry.trip}-day` : "";
+    grid += `
+      <div class="calendar-day${cls}" ${entry ? `title="${escapeHtml(entry.theme)}"` : ""}>
+        <span class="day-num">${day}</span>
+        ${entry ? `<span class="day-icon">${entry.icon}</span>` : ""}
+      </div>
+    `;
+  }
+
+  const legendBusan = lang === "ko" ? "부산" : "Busan";
+  const legendJeju = lang === "ko" ? "제주" : "Jeju";
+  document.getElementById("trip-calendar").innerHTML = `
+    <div class="calendar-grid">${grid}</div>
+    <div class="calendar-legend">
+      <span class="legend-item"><span class="legend-dot busan-dot"></span>${legendBusan}</span>
+      <span class="legend-item"><span class="legend-dot jeju-dot"></span>${legendJeju}</span>
+    </div>
+  `;
+}
+
 function renderPlanTab() {
   const p = PLAN_DATA[lang] || PLAN_DATA.en;
 
   document.getElementById("plan-edit-note").textContent = p.editNote;
+  renderTripRoute(p);
+  renderTripCalendar(p);
 
   // Busan
   document.getElementById("busan-plan-title").textContent = p.busanTitle;
