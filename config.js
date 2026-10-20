@@ -8,3 +8,7 @@ const FIREBASE_CONFIG = {
   messagingSenderId: "870457044792",
   appId: "1:870457044792:web:9fe9885f4fd8bcabf49bcd",
 };
+
+// Photo uploads go through ImgBB instead of Firebase Storage (which now
+// requires a billing-enabled Blaze plan even for free-tier usage).
+const IMGBB_API_KEY = "f1ca58b362e55f3102707e4004b0bb4f";

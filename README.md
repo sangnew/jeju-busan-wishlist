@@ -11,11 +11,19 @@ Everyone sees the same shared list, updated live.
 
 ## How it stores data
 
-It uses [Firebase Firestore](https://firebase.google.com/docs/firestore),
-called directly from each visitor's browser via the Firebase Web SDK (loaded
-from CDN, no build step). There's no server to run and no account needed for
-people using the site — only the project owner needs a (free) Firebase
-project.
+Text data (wishlist items, likes, comments) uses [Firebase
+Firestore](https://firebase.google.com/docs/firestore), called directly from
+each visitor's browser via the Firebase Web SDK (loaded from CDN, no build
+step).
+
+Photos go through [ImgBB](https://api.imgbb.com/) instead of Firebase
+Storage — Firebase Storage now requires the billing-enabled Blaze plan even
+for free-tier usage, while ImgBB's free API needs only an email signup, no
+card. The client compresses each photo (max 1600px, JPEG) before upload.
+
+There's no server to run and no account needed for people using the site —
+only the project owner needs the free Firebase project and the free ImgBB
+API key.
 
 ## One-time setup (already done for this deployment)
 
@@ -37,7 +45,9 @@ project.
    30 days) — needed since the trip is in December.
 4. Project settings → your apps → add a Web app → copy the `firebaseConfig`
    object into `config.js` as `FIREBASE_CONFIG`.
-5. Push to GitHub and enable GitHub Pages (Settings → Pages → Deploy from
+5. Get a free API key at https://api.imgbb.com/ (email signup only) → put it
+   in `config.js` as `IMGBB_API_KEY`.
+6. Push to GitHub and enable GitHub Pages (Settings → Pages → Deploy from
    branch → `master` / root).
 
 The app creates its single Firestore document (`wishlist/data`) automatically
@@ -53,3 +63,6 @@ on first write — no manual initialization needed.
   undo.
 - Firestore's free tier (Spark plan) comfortably covers a small family trip's
   worth of reads/writes.
+- Deleting a photo only removes it from the wishlist item — the image stays
+  hosted on ibb.co (publicly viewable by anyone with its direct link, like
+  any image link). Fine for trip snapshots, not for anything private.

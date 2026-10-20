@@ -3,9 +3,6 @@ import {
   getFirestore, doc, onSnapshot, setDoc, updateDoc,
   arrayUnion, arrayRemove, runTransaction,
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import {
-  getStorage, ref, uploadBytes, getDownloadURL,
-} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-storage.js";
 
 const TRIPS = ["busan", "jeju"];
 const CATS = ["food", "activities", "places", "stays"];
@@ -75,7 +72,6 @@ function showBanner(msg, isError) {
 
 const app = initializeApp(FIREBASE_CONFIG);
 const db = getFirestore(app);
-const storage = getStorage(app);
 const docRef = doc(db, "wishlist", "data");
 
 function startListening() {
@@ -186,11 +182,15 @@ function compressImage(file, maxDim = 1600, quality = 0.8) {
 async function addPhoto(trip, cat, item, file) {
   try {
     const blob = await compressImage(file);
-    const path = `wishlist-photos/${item.id}-${crypto.randomUUID()}.jpg`;
-    const fileRef = ref(storage, path);
-    await uploadBytes(fileRef, blob, { contentType: "image/jpeg" });
-    const url = await getDownloadURL(fileRef);
-    const photo = { id: crypto.randomUUID(), url, ts: Date.now() };
+    const formData = new FormData();
+    formData.append("image", blob, "photo.jpg");
+    const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+      method: "POST",
+      body: formData,
+    });
+    const json = await res.json();
+    if (!json.success) throw new Error("imgbb upload failed");
+    const photo = { id: crypto.randomUUID(), url: json.data.url, ts: Date.now() };
     const newItem = { ...item, photos: [...(item.photos || []), photo] };
     await replaceListItem(trip, cat, item.id, newItem);
   } catch (e) {
