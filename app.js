@@ -582,6 +582,24 @@ function renderPlanTab() {
   const p = PLAN_DATA[lang] || PLAN_DATA.en;
 
   document.getElementById("plan-edit-note").textContent = p.editNote;
+
+  // Fixed (booked) schedule — its own tab, one card per section
+  document.getElementById("fixed-note").textContent = p.fixedNote;
+  document.getElementById("fixed-sections").innerHTML = p.fixedSections.map((sec) => `
+    <article class="category-card fixed-card">
+      <h3 class="plan-subtitle">${escapeHtml(sec.title)}</h3>
+      ${sec.items.map((f) => `
+        <div class="fixed-row">
+          <div class="fixed-date">${escapeHtml(f.date)}</div>
+          <div class="fixed-main">
+            <strong>${f.icon} ${escapeHtml(f.what)}</strong>
+            <div>${escapeHtml(f.detail)}</div>
+            ${f.url ? `<a class="plan-link" href="${escapeHtml(f.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(f.linkText)}</a>` : ""}
+          </div>
+        </div>
+      `).join("")}
+    </article>
+  `).join("");
   renderTripRoute(p);
   renderTripCalendar(p);
 

@@ -7,6 +7,19 @@ const PLAN_DATA = {
   en: {
     editNote: "This page is curated by Claude, not crowd-edited like the wishlist tabs — just ask for any change (swap a stay, update a price) and it's updated here for everyone.",
 
+    fixedNote: "Only booked/confirmed items live here. Food, routes, and anything else gets added as it's locked in.",
+    fixedSections: [
+      { title: "🎫 Transport", items: [
+        { date: "Dec 22 (Tue)", icon: "🚄", what: "KTX Pyeongtaek Jije → Busan", detail: "08:00 departure · ~2h to Busan Station" },
+        { date: "Dec 23 (Wed)", icon: "✈️", what: "Flight Busan (Gimhae) → Jeju", detail: "15:05 departure → 16:05 arrival" },
+        { date: "Dec 26 (Sat)", icon: "✈️", what: "Flight Jeju → Cheongju", detail: "14:05 departure → 15:15 arrival at Cheongju International" },
+      ] },
+      { title: "🏨 Stays", items: [
+        { date: "Dec 22 (Tue)", icon: "🏨", what: "Busan stay — Munhyeon Signature Denbasta Hotel", detail: "1 night (Dec 22–23) · 807-9 Munhyeon-dong, Nam-gu, near Munhyeon Station", url: "https://www.yeogi.com/domestic-accommodations/69860", linkText: "Hotel page" },
+        { date: "Dec 23 (Wed)", icon: "🏡", what: "Jeju stay — Aewol Ocean View, Every Room (Airbnb)", detail: "3 nights (Dec 23–26) · Aewol, ~40 min from Jeju Airport", url: "https://www.airbnb.co.kr/rooms/46684988?check_in=2026-12-23&check_out=2026-12-26&adults=5", linkText: "Airbnb listing" },
+      ] },
+    ],
+
     calendarTitle: "📅 Trip calendar",
     routeTitle: "🧭 Route at a glance",
     route: [
@@ -160,6 +173,19 @@ const PLAN_DATA = {
   },
   ko: {
     editNote: "이 페이지는 위시리스트 탭처럼 실시간으로 다 같이 고치는 게 아니라 제가(Claude) 큐레이션한 내용이에요 — 숙소를 바꾸거나 가격을 업데이트하고 싶으면 언제든 말씀해주시면 바로 반영해드려요.",
+
+    fixedNote: "예약·확정된 것만 모아둔 칸입니다. 음식, 경로 등도 확정되는 대로 여기에 추가됩니다.",
+    fixedSections: [
+      { title: "🎫 교통", items: [
+        { date: "12/22 (화)", icon: "🚄", what: "KTX 평택지제 → 부산", detail: "08:00 출발 · 부산역까지 약 2시간" },
+        { date: "12/23 (수)", icon: "✈️", what: "항공 부산(김해) → 제주", detail: "15:05 출발 → 16:05 도착" },
+        { date: "12/26 (토)", icon: "✈️", what: "항공 제주 → 청주", detail: "14:05 출발 → 15:15 청주국제공항 도착" },
+      ] },
+      { title: "🏨 숙소", items: [
+        { date: "12/22 (화)", icon: "🏨", what: "부산 숙소 — 문현 시그니처 덴바스타호텔", detail: "1박 (12/22~23) · 부산 남구 문현동 807-9, 문현역 인근", url: "https://www.yeogi.com/domestic-accommodations/69860", linkText: "호텔 페이지" },
+        { date: "12/23 (수)", icon: "🏡", what: "제주 숙소 — 전객실 애월오션뷰 (에어비앤비)", detail: "3박 (12/23~26) · 애월, 제주공항에서 차로 약 40분", url: "https://www.airbnb.co.kr/rooms/46684988?check_in=2026-12-23&check_out=2026-12-26&adults=5", linkText: "에어비앤비 페이지" },
+      ] },
+    ],
 
     calendarTitle: "📅 여행 달력",
     routeTitle: "🧭 한눈에 보는 루트",

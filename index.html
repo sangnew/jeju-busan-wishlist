@@ -29,6 +29,9 @@
   <button class="trip-tab" data-trip="plan">
     <span data-i18n="tripPlan">📋 Plan</span>
   </button>
+  <button class="trip-tab" data-trip="fixed">
+    <span data-i18n="tripFixed">✅ Fixed</span>
+  </button>
 </nav>
 
 <div id="status-banner" class="status-banner" hidden></div>
@@ -171,6 +174,12 @@
         <button type="submit" data-i18n="addBtn">Add</button>
       </form>
     </article>
+  </section>
+
+  <!-- ===== FIXED PANEL (booked/confirmed only) ===== -->
+  <section class="trip-panel" data-trip-panel="fixed">
+    <p class="plan-edit-note" id="fixed-note"></p>
+    <div id="fixed-sections"></div>
   </section>
 
   <!-- ===== PLAN PANEL (curated, not crowd-sourced) ===== -->
