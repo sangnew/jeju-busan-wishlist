@@ -348,7 +348,7 @@ body {
 .fixed-card { border: 2px solid var(--teal); }
 .fixed-card .plan-subtitle { color: var(--teal-dark); }
 .fixed-row { display: flex; gap: 12px; padding: 10px 12px; margin-bottom: 8px; background: #e7f5f3; border-radius: 10px; }
-.fixed-date { flex: 0 0 92px; font-weight: 700; font-size: 0.85rem; color: var(--teal-dark); }
+.fixed-date { flex: 0 0 64px; font-weight: 700; font-size: 0.85rem; color: var(--teal-dark); }
 .fixed-main { min-width: 0; flex: 1; font-size: 0.9rem; }
 .fixed-main div { color: var(--muted); font-size: 0.85rem; margin-top: 2px; }
 .fixed-main .plan-link { font-size: 0.8rem; }
